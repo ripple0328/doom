@@ -14,7 +14,7 @@
 - [[#troubleshooting][Troubleshooting]]
 
 * Description
-A summary of what this module does.
+I had switch from spacemacs to doom emacs, because it is much faster and simpler
 
 + If possible, include a brief list of feature highlights here
 + Like code completion, syntax checking or available snippets
