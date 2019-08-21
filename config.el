@@ -10,16 +10,20 @@
   wakatime-cli-path "/usr/local/bin/wakatime"
 )
 
+(def-package! org-fancy-priorities
+  :hook (org-mode . org-fancy-priorities-mode)
+  :config
+  (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕") ))
+
 (after! org
   (map! :map org-mode-map
         :n "M-j" #'org-metadown
         :n "M-k" #'org-metaup)
-  (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")
-        org-directory "Shared/Notes/"
+  (setq org-directory "Shared/Notes/"
         org-agenda-files (directory-files-recursively "~/Shared/Notes/" "\.org$")
         org-log-done 'time
         org-tags-column -80
-        org-ellipsis " ▾ "
+        org-ellipsis " ⤵"
         org-bullets-bullet-list '("·:")
         org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))
         org-todo-keyword-faces
