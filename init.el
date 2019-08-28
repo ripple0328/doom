@@ -63,7 +63,7 @@
        vc                ; version-control and emacs, sitting in a tree
 
        :term
-       ;;eshell            ; a consistent, cross-platform shell (wip)
+       eshell            ; a consistent, cross-platform shell (wip)
        shell             ; a terminal repl for emacs
        ;; term              ; terminals in emacs
        ;;vterm             ; another terminals in emacs
@@ -116,11 +116,11 @@
        ;;idris             ;
        (java +meghanada) ; the poster child for carpal tunnel syndrome
        javascript        ; all(hope(abandon(ye(who(enter(here))))))
-       ;;julia             ; a better, faster matlab
+       julia             ; a better, faster matlab
        kotlin            ; a better, slicker java(script)
-       ;;latex             ; writing papers in emacs has never been so fun
+       latex             ; writing papers in emacs has never been so fun
        ;;ledger            ; an accounting system in emacs
-       ;;lua               ; one-based indices? one-based indices
+       lua               ; one-based indices? one-based indices
        markdown          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; i hereby declare "nix geht mehr!"
@@ -138,8 +138,8 @@
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a dsl for dsls
        ;;rest              ; emacs as a rest client
-       ;; ruby              ; 1.step {|i| p "ruby is #{i.even? ? 'love' : 'life'}"}
-       ;;rust              ; fe2o3.unwrap().unwrap().unwrap().unwrap()
+       ruby              ; 1.step {|i| p "ruby is #{i.even? ? 'love' : 'life'}"}
+       rust              ; fe2o3.unwrap().unwrap().unwrap().unwrap()
        scala             ; java, but good
        ;;scheme            ; a fully conniving family of lisps
        sh                ; she sells {ba,z,fi}sh shells on the c xor
@@ -158,7 +158,7 @@
        ;; toward a specific purpose. they may have additional dependencies and
        ;; should be loaded late.
        :app
-       ;;calendar
+       calendar
        ;;irc              ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an rss reader
        ;; twitter           ; twitter client https://twitter.com/vnought
