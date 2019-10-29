@@ -25,7 +25,7 @@
        doom-quit         ; doom quit-message prompts when you quit emacs
        ;;fill-column       ; a `fill-column' indicator
        hl-todo           ; highlight todo/fixme/note tags
-       ;;indent-guides     ; highlighted indent columns
+       indent-guides     ; highlighted indent columns
        modeline          ; snazzy, atom-inspired modeline, plus api
        nav-flash         ; blink the current line after jumping
        ;;neotree           ; a project drawer, like nerdtree for vim
@@ -72,12 +72,12 @@
        ;;ansible
        ;;debugger          ; fixme stepping through code, to help you add bugs
        ;;direnv
-       ;;docker
+       docker
        editorconfig      ; let someone else argue about tabs vs spaces
        ein               ; tame jupyter notebooks with emacs
        eval              ; run code, run (also, repls)
        flycheck          ; tasing you for every semicolon you forget
-       ;;flyspell          ; tasing you for misspelling mispelling
+       flyspell          ; tasing you for misspelling mispelling
        ;;gist              ; interacting with github gists
        (lookup           ; helps you navigate your code and documentation
         +docsets)        ; ...or in dash docsets locally
@@ -119,7 +119,7 @@
        julia             ; a better, faster matlab
        kotlin            ; a better, slicker java(script)
        latex             ; writing papers in emacs has never been so fun
-       ;;ledger            ; an accounting system in emacs
+       ledger            ; an accounting system in emacs
        lua               ; one-based indices? one-based indices
        markdown          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
@@ -150,8 +150,8 @@
        ;;vala              ; gobjective-c
 
        :email
-       ;;(mu4e +gmail)       ; wip
-       ;;notmuch             ; wip
+       (mu4e +gmail)       ; wip
+       notmuch             ; wip
        ;;(wanderlust +gmail) ; wip
 
        ;; applications are complex and opinionated modules that transform emacs
@@ -160,15 +160,15 @@
        :app
        calendar
        ;;irc              ; how neckbeards socialize
-       ;;(rss +org)        ; emacs as an rss reader
+       (rss +org)        ; emacs as an rss reader
        ;; twitter           ; twitter client https://twitter.com/vnought
        ;;(write            ; emacs as a word processor (latex + org + markdown)
        ;; +wordnut         ; wordnet (wn) search
        ;; +langtool)       ; a proofreader (grammar/style check) for emacs
 
        :collab
-       ;;floobits          ; peer programming for a price
-       ;; impatient-mode    ; show off code over HTTP
+       floobits          ; peer programming for a price
+       impatient-mode    ; show off code over HTTP
 
        :config
        ;; For literate config users. This will tangle+compile a config.org
