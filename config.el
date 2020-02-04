@@ -17,6 +17,7 @@
   gnutls-verify-error nil
   wakatime-cli-path "/usr/local/bin/wakatime"
   wakatime-api-key "4a6bb692-ecb1-4a87-b177-46c29f24a451"
+  treemacs-follow-mode t
   easy-hugo-basedir "~/Shared/Personal/blog/"
   easy-hugo-default-ext ".org"
   easy-hugo-org-header t
@@ -37,7 +38,7 @@
   (map! :map org-mode-map
         :n "M-j" #'org-metadown
         :n "M-k" #'org-metaup)
-  (setq org-directory "Shared/Notes/"
+  (setq org-directory "~/Shared/Notes/"
         org-agenda-files (directory-files-recursively "~/Shared/Notes/" "\.org$")
         org-log-done 'time
         org-tags-column -80

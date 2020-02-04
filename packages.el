@@ -15,5 +15,4 @@
 (package! org-jira)
 (package! floobits)
 (package! docker)
-(package! terraform-mode)
 (package! command-log-mode)
