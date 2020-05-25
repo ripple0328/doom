@@ -40,6 +40,7 @@
         :n "M-k" #'org-metaup)
   (setq org-directory "~/Shared/Notes/"
         org-agenda-files (directory-files-recursively "~/Shared/Notes/" "\.org$")
+        org-roam-directory "~/Shared/org-roam/"
         org-log-done 'time
         org-tags-column -80
         org-ellipsis "⚡⚡⚡"
