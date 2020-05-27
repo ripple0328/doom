@@ -5,8 +5,27 @@
 (add-to-list 'default-frame-alist '(height . 50))
 (add-to-list 'default-frame-alist '(width . 100))
 (setq user-full-name    "Zhang Qingbo"
-      user-mail-address "ripple0328@gmail.com")
-
+      user-mail-address "ripple0328@gmail.com"
+      message-send-mail-function 'smtpmail-send-it
+      starttls-use-gnutls t
+      smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+      mu4e-maildir-shortcuts '((
+                                :maildir "/inbox" :key ?i))
+      smtpmail-auth-credentials
+      '(("smtp.gmail.com" 587 "ripple0328@gmail.com" nil))
+      smtpmail-default-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 587)
+(set-email-account! "Gmail"
+  '((mu4e-sent-folder       . "/Gmail/Sent Mail")
+    (mu4e-drafts-folder     . "/Gmail/Drafts")
+    (mu4e-trash-folder      . "/Gmail/Trash")
+    (mu4e-refile-folder     . "/Gmail/All Mail")
+    (smtpmail-smtp-user     . "ripple0328@gmail.com")
+    (mu4e-get-mail-command  . "mbsync --all")
+    (user-mail-address      . "ripple0328@gmail.com")    ;; only needed for mu < 1.4
+    (mu4e-compose-signature . "---\n Qingbo Zhang"))
+  t)
 (setq
   doom-theme 'doom-dracula
   doom-font (font-spec :family "mononoki" :size 16)
