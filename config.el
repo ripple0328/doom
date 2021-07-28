@@ -6,8 +6,12 @@
 (add-to-list 'default-frame-alist '(width . 100))
 (setq user-full-name    "Zhang Qingbo"
       user-mail-address "ripple0328@gmail.com"
+      auth-sources '("~/.authinfo.gpg")
+      auth-source-cache-expiry nil
       message-send-mail-function 'smtpmail-send-it
       starttls-use-gnutls t
+      display-time-mode 1   ; Enable time in the mode-line
+      global-subword-mode 1 ; Iterate through CamelCase words
       smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
       mu4e-maildir-shortcuts '((
                                 :maildir "/inbox" :key ?i))
@@ -16,6 +20,12 @@
       smtpmail-default-smtp-server "smtp.gmail.com"
       smtpmail-smtp-server "smtp.gmail.com"
       smtpmail-smtp-service 587)
+(setq-default
+ delete-by-moving-to-trash t                      ; Delete files to trash
+ window-combination-resize t                      ; take new window space from all other windows (not just current)
+ x-stretch-cursor t
+ major-mode 'org-mode
+ )
 (set-email-account! "Gmail"
   '((mu4e-sent-folder       . "/Gmail/Sent Mail")
     (mu4e-drafts-folder     . "/Gmail/Drafts")
