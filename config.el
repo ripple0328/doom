@@ -11,6 +11,7 @@
       message-send-mail-function 'smtpmail-send-it
       starttls-use-gnutls t
       display-time-mode 1   ; Enable time in the mode-line
+      mac-right-option-modifier 'meta
       global-subword-mode 1 ; Iterate through CamelCase words
       smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
       mu4e-maildir-shortcuts '((
@@ -66,7 +67,7 @@
         :n "M-j" #'org-metadown
         :n "M-k" #'org-metaup)
   (setq org-directory "~/Documents/notes/"
-        org-agenda-files (directory-files-recursively "~/Documents/notes/" "\.org$")
+        org-agenda-files (directory-files-recursively "~/Documents/notes/" "\\.org$")
         org-roam-directory "~/Documents/org-roam/"
         org-log-done 'time
         org-agenda-start-with-log-mode t
@@ -88,9 +89,15 @@
 (use-package org-journal
   :defer t
   :config
-  (setq org-journal-dir "~/Documents/journal/"
+  (setq org-journal-dir "~/Documents/notes/journal/"
+        org-journal-file-type 'monthly
         org-journal-file-format "%Y-%m-%d.org"
-        org-journal-date-format "%Y-%m-%d [%a]"))
+        org-journal-date-format "%Y-%m-%d [%a]")
+  )
+
+(map! :leader
+      :desc "other window"
+      "w o" #'other-window)
 
   (set-face-attribute 'org-link nil
                       :weight 'normal
