@@ -37,10 +37,10 @@
     (mu4e-compose-signature . "---\n Qingbo Zhang"))
   t)
 (setq
-  doom-theme 'doom-dracula
-  doom-font (font-spec :family "mononoki" :size 16)
-  doom-variable-pitch-font (font-spec :family "mononoki" :size 16)
-  doom-big-font (font-spec :family "mononoki" :size 30)
+  doom-theme 'doom-Iosvkem
+  doom-font (font-spec :family "Iosevka Term SS04" :size 16 :weight 'light)
+  doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 16)
+  doom-big-font (font-spec :family "Iosevka Term SS04" :size 36)
   avy-all-windows t
   evil-escape-key-sequence "fd"
   gnutls-verify-error nil
@@ -53,6 +53,7 @@
   easy-hugo-previewtime "300"
   easy-hugo-server-flags "-D"
   easy-hugo-url "https://blog.qingbo.tech"
+  jiralib-url "https://rba.atlassian.net"
 )
 
 (use-package! org-fancy-priorities
@@ -64,13 +65,15 @@
   (map! :map org-mode-map
         :n "M-j" #'org-metadown
         :n "M-k" #'org-metaup)
-  (setq org-directory "~/Shared/Notes/"
-        org-agenda-files (directory-files-recursively "~/Shared/Notes/" "\.org$")
-        org-roam-directory "~/Shared/org-roam/"
+  (setq org-directory "~/Documents/notes/"
+        org-agenda-files (directory-files-recursively "~/Documents/notes/" "\.org$")
+        org-roam-directory "~/Documents/org-roam/"
         org-log-done 'time
+        org-agenda-start-with-log-mode t
+        org-log-into-drawer t
         org-tags-column -80
         org-ellipsis "⚡⚡⚡"
-        org-bullets-bullet-list (quote ("◉" "◆" "✚" "☀" "○"))
+        org-superstar-headline-bullets-list '("⁖" "◉" "○" "✸" "✿")
         org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))
         org-todo-keyword-faces
         '(
@@ -80,7 +83,15 @@
            ("DONE" :foreground "#50a14f" :weight normal :underline t)
            ("CANCELLED" :foreground "#ff6480" :weight normal :underline t)
            )
-  )
+        )
+ )
+(use-package org-journal
+  :defer t
+  :config
+  (setq org-journal-dir "~/Documents/journal/"
+        org-journal-file-format "%Y-%m-%d.org"
+        org-journal-date-format "%Y-%m-%d [%a]"))
+
   (set-face-attribute 'org-link nil
                       :weight 'normal
                       :background nil)
@@ -119,4 +130,3 @@
                       :background nil
                       :height 1.75
                       :weight 'bold)
-)
