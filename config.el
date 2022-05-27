@@ -38,7 +38,7 @@
     (mu4e-compose-signature . "---\n Qingbo Zhang"))
   t)
 (setq
-  doom-theme 'doom-Iosvkem
+  doom-theme 'modus-vivendi
   doom-font (font-spec :family "Iosevka Term SS04" :size 16 :weight 'light)
   doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 16)
   doom-big-font (font-spec :family "Iosevka Term SS04" :size 36)
