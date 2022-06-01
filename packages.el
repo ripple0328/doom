@@ -11,5 +11,4 @@
 (package! presentation)
 (package! org-jira)
 (package! floobits)
-(package! docker)
 (package! command-log-mode)
