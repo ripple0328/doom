@@ -9,5 +9,4 @@
 (package! wakatime-mode)
 (package! presentation)
 (package! org-jira)
-(package! floobits)
 (package! command-log-mode)
