@@ -10,3 +10,4 @@
 (package! presentation)
 (package! org-jira)
 (package! command-log-mode)
+(package! just-mode)
