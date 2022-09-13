@@ -11,6 +11,7 @@
       message-send-mail-function 'smtpmail-send-it
       starttls-use-gnutls t
       display-time-mode 1   ; Enable time in the mode-line
+      tool-bar-mode -1
       mac-right-option-modifier 'meta
       global-subword-mode 1 ; Iterate through CamelCase words
       smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
