@@ -1,3 +1,12 @@
+#+title: Emacs Configuration
+
+* Introduction
+
+
+* Initial
+
+** basic
+#+begin_src emacs-lisp :tangle yes
 (setq user-full-name    "Zhang Qingbo"
       user-mail-address "ripple0328@gmail.com"
       auth-sources '("~/.authinfo.gpg")
@@ -17,11 +26,17 @@
       smtpmail-smtp-server "smtp.gmail.com"
       smtpmail-smtp-service 587)
 
+#+end_src
+** dashboard
+#+begin_src emacs-lisp :tangle yes
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 (add-hook! '+doom-dashboard-functions :append
 (setq-hook! '+doom-dashboard-mode-hook evil-normal-state-cursor (list nil))
 (setq fancy-splash-image (concat doom-user-dir "vagabond.png")))
+#+end_src
 
+* uncleaned
+#+begin_src emacs-lisp :tangle yes
 (add-to-list 'default-frame-alist '(height . 50))
 (add-to-list 'default-frame-alist '(width . 100))
 (setq-default
@@ -101,3 +116,5 @@
 (map! :leader
       :desc "other window"
       "w o" #'other-window)
+
+#+end_src
