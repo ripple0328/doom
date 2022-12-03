@@ -27,7 +27,6 @@
   doom-font (font-spec :family "Iosevka Term SS04" :size 16 :weight 'light)
   doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 16)
   doom-big-font (font-spec :family "Iosevka Term SS04" :size 36)
-
 )
 (setq-default line-spacing 0.24)
 (setq-default mode-line-format
