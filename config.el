@@ -2,12 +2,18 @@
       user-mail-address "ripple0328@gmail.com"
       auth-sources '("~/.authinfo.gpg")
       auth-source-cache-expiry nil
-      message-send-mail-function 'smtpmail-send-it
       starttls-use-gnutls t
       display-time-mode 1   ; Enable time in the mode-line
       tool-bar-mode -1
       mac-right-option-modifier 'meta
       global-subword-mode 1 ; Iterate through CamelCase words
+      delete-by-moving-to-trash t                      ; Delete files to trash
+      window-combination-resize t                      ; take new window space from all other windows (not just current)
+      x-stretch-cursor t
+      avy-all-windows t
+      evil-escape-key-sequence "fd"
+      gnutls-verify-error nil
+      major-mode 'org-mode
 )
 
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
@@ -17,6 +23,12 @@
 
 (add-to-list 'default-frame-alist '(height . 50))
 (add-to-list 'default-frame-alist '(width . 100))
+(setq doom-theme 'modus-vivendi
+  doom-font (font-spec :family "Iosevka Term SS04" :size 16 :weight 'light)
+  doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 16)
+  doom-big-font (font-spec :family "Iosevka Term SS04" :size 36)
+
+)
 (setq-default line-spacing 0.24)
 (setq-default mode-line-format
                 (cons (propertize "\u200b" 'display '((raise -0.35) (height 1.4))) mode-line-format))
@@ -68,6 +80,7 @@
         mu4e-index-lazy-check t
         mu4e-update-internal 300
         smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+        message-send-mail-function 'smtpmail-send-it
         mu4e-maildir-shortcuts '((
                                 :maildir "/inbox" :key ?i))
         smtpmail-auth-credentials '(("smtp.gmail.com" 587 "ripple0328@gmail.com" nil))
@@ -86,37 +99,6 @@
     (mu4e-compose-signature . "---\n Qingbo Zhang"))
   )
 )
-
-(setq-default
- delete-by-moving-to-trash t                      ; Delete files to trash
- window-combination-resize t                      ; take new window space from all other windows (not just current)
- x-stretch-cursor t
- major-mode 'org-mode
- )
-(setq
-  doom-theme 'modus-vivendi
-  doom-font (font-spec :family "Iosevka Term SS04" :size 16 :weight 'light)
-  doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 16)
-  doom-big-font (font-spec :family "Iosevka Term SS04" :size 36)
-  avy-all-windows t
-  evil-escape-key-sequence "fd"
-  gnutls-verify-error nil
-  wakatime-cli-path "/usr/local/bin/wakatime"
-  wakatime-api-key "4a6bb692-ecb1-4a87-b177-46c29f24a451"
-  treemacs-follow-mode t
-  easy-hugo-basedir "~/Shared/Personal/blog/"
-  easy-hugo-default-ext ".org"
-  easy-hugo-org-header t
-  easy-hugo-previewtime "300"
-  easy-hugo-server-flags "-D"
-  easy-hugo-url "https://blog.qingbo.tech"
-  jiralib-url "https://rba.atlassian.net"
-)
-
-(use-package! org-fancy-priorities
-  :hook (org-mode . org-fancy-priorities-mode)
-  :config
-  (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕") ))
 
 (after! org
   (map! :map org-mode-map
@@ -141,15 +123,30 @@
            ("CANCELLED" :foreground "#ff6480" :weight normal :underline t)
            )
         )
- )
-(use-package org-journal
-  :defer t
+  (use-package! org-fancy-priorities
+  :hook (org-mode . org-fancy-priorities-mode)
   :config
-  (setq org-journal-dir "~/Documents/notes/journal/"
-        org-journal-file-type 'monthly
-        org-journal-file-format "%Y-%m-%d.org"
-        org-journal-date-format "%Y-%m-%d [%a]")
+  (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕") ))
+)
+
+(setq treemacs-follow-mode t)
+
+(setq  wakatime-cli-path "/usr/local/bin/wakatime"
+  wakatime-api-key "4a6bb692-ecb1-4a87-b177-46c29f24a451"
+ )
+
+(setq
+  easy-hugo-basedir "~/Shared/Personal/blog/"
+  easy-hugo-default-ext ".org"
+  easy-hugo-org-header t
+  easy-hugo-previewtime "300"
+  easy-hugo-server-flags "-D"
+  easy-hugo-url "https://blog.qingbo.tech"
   )
+
+(setq
+ jiralib-url "https://rba.atlassian.net"
+)
 
 (map! :leader
       :desc "other window"
