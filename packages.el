@@ -11,3 +11,4 @@
 (package! org-jira)
 (package! command-log-mode)
 (package! just-mode)
+(package! good-scroll)

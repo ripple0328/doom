@@ -8,14 +8,7 @@
       tool-bar-mode -1
       mac-right-option-modifier 'meta
       global-subword-mode 1 ; Iterate through CamelCase words
-      smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
-      mu4e-maildir-shortcuts '((
-                                :maildir "/inbox" :key ?i))
-      smtpmail-auth-credentials
-      '(("smtp.gmail.com" 587 "ripple0328@gmail.com" nil))
-      smtpmail-default-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-service 587)
+)
 
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 (add-hook! '+doom-dashboard-functions :append
@@ -24,12 +17,64 @@
 
 (add-to-list 'default-frame-alist '(height . 50))
 (add-to-list 'default-frame-alist '(width . 100))
-(setq-default
- delete-by-moving-to-trash t                      ; Delete files to trash
- window-combination-resize t                      ; take new window space from all other windows (not just current)
- x-stretch-cursor t
- major-mode 'org-mode
- )
+(setq-default line-spacing 0.24)
+(setq-default mode-line-format
+                (cons (propertize "\u200b" 'display '((raise -0.35) (height 1.4))) mode-line-format))
+
+(modify-all-frames-parameters
+'((right-divider-width . 10)
+ (internal-border-width . 10)))
+(dolist (face '(window-divider
+               window-divider-first-pixel
+                window-divider-last-pixel))
+(face-spec-reset-face face)
+(set-face-foreground face (face-attribute 'default :background)))
+(set-face-background 'fringe (face-attribute 'default :background))
+(good-scroll-mode 1)
+
+(use-package! theme-magic
+  :commands theme-magic-from-emacs
+  :config
+  (defadvice! theme-magic--auto-extract-16-doom-colors ()
+    :override #'theme-magic--auto-extract-16-colors
+    (list
+     (face-attribute 'default :background)
+     (doom-color 'error)
+     (doom-color 'success)
+     (doom-color 'type)
+     (doom-color 'keywords)
+     (doom-color 'constants)
+     (doom-color 'functions)
+     (face-attribute 'default :foreground)
+     (face-attribute 'shadow :foreground)
+     (doom-blend 'base8 'error 0.1)
+     (doom-blend 'base8 'success 0.1)
+     (doom-blend 'base8 'type 0.1)
+     (doom-blend 'base8 'keywords 0.1)
+     (doom-blend 'base8 'constants 0.1)
+     (doom-blend 'base8 'functions 0.1)
+     (face-attribute 'default :foreground))))
+
+(setq scroll-margin 2
+      auto-save-default t
+      display-line-numbers-type nil
+      delete-by-moving-to-trash t
+      truncate-string-ellipsis "…"
+      browse-url-browser-function 'xwidget-webkit-browse-url)
+(global-subword-mode 1)
+
+(after! mu4e
+  (setq mu4e-index-cleanup nil
+        mu4e-index-lazy-check t
+        mu4e-update-internal 300
+        smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+        mu4e-maildir-shortcuts '((
+                                :maildir "/inbox" :key ?i))
+        smtpmail-auth-credentials '(("smtp.gmail.com" 587 "ripple0328@gmail.com" nil))
+        smtpmail-default-smtp-server "smtp.gmail.com"
+        smtpmail-smtp-server "smtp.gmail.com"
+        smtpmail-smtp-service 587)
+
 (set-email-account! "Gmail"
   '((mu4e-sent-folder       . "/Gmail/Sent Mail")
     (mu4e-drafts-folder     . "/Gmail/Drafts")
@@ -39,7 +84,15 @@
     (mu4e-get-mail-command  . "mbsync --all")
     (user-mail-address      . "ripple0328@gmail.com")    ;; only needed for mu < 1.4
     (mu4e-compose-signature . "---\n Qingbo Zhang"))
-  t)
+  )
+)
+
+(setq-default
+ delete-by-moving-to-trash t                      ; Delete files to trash
+ window-combination-resize t                      ; take new window space from all other windows (not just current)
+ x-stretch-cursor t
+ major-mode 'org-mode
+ )
 (setq
   doom-theme 'modus-vivendi
   doom-font (font-spec :family "Iosevka Term SS04" :size 16 :weight 'light)
