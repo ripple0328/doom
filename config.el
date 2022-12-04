@@ -3,7 +3,7 @@
       auth-sources '("~/.authinfo.gpg")
       auth-source-cache-expiry nil
       starttls-use-gnutls t
-      display-time-mode 1   ; Enable time in the mode-line
+      display-time-mode t   ; Enable time in the mode-line
       tool-bar-mode -1
       mac-right-option-modifier 'meta
       global-subword-mode 1 ; Iterate through CamelCase words
@@ -21,12 +21,12 @@
 (setq-hook! '+doom-dashboard-mode-hook evil-normal-state-cursor (list nil))
 (setq fancy-splash-image (concat doom-user-dir "vagabond.png")))
 
-(add-to-list 'default-frame-alist '(height . 50))
-(add-to-list 'default-frame-alist '(width . 100))
+;;(if (eq system-type 'darwin) (your-mac-config) (your-non-mac-config))
+
 (setq doom-theme 'modus-vivendi
-  doom-font (font-spec :family "Iosevka Term SS04" :size 16 :weight 'light)
-  doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 16)
-  doom-big-font (font-spec :family "Iosevka Term SS04" :size 36)
+  doom-font (font-spec :family "Iosevka Term SS04" :size 32 :weight 'light)
+  doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 32)
+  doom-big-font (font-spec :family "Iosevka Term SS04" :size 72)
 )
 (setq-default line-spacing 0.24)
 (setq-default mode-line-format
