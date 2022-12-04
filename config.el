@@ -1,18 +1,6 @@
 (setq user-full-name    "Zhang Qingbo"
       user-mail-address "ripple0328@gmail.com"
       auth-sources '("~/.authinfo.gpg")
-      auth-source-cache-expiry nil
-      starttls-use-gnutls t
-      display-time-mode t   ; Enable time in the mode-line
-      tool-bar-mode -1
-      mac-right-option-modifier 'meta
-      global-subword-mode 1 ; Iterate through CamelCase words
-      delete-by-moving-to-trash t                      ; Delete files to trash
-      window-combination-resize t                      ; take new window space from all other windows (not just current)
-      x-stretch-cursor t
-      avy-all-windows t
-      evil-escape-key-sequence "fd"
-      gnutls-verify-error nil
       major-mode 'org-mode
 )
 
@@ -21,58 +9,34 @@
 (setq-hook! '+doom-dashboard-mode-hook evil-normal-state-cursor (list nil))
 (setq fancy-splash-image (concat doom-user-dir "vagabond.png")))
 
-;;(if (eq system-type 'darwin) (your-mac-config) (your-non-mac-config))
-
+(if (eq system-type 'darwin)
+(setq doom-theme 'modus-vivendi
+  doom-font (font-spec :family "Iosevka Term SS04" :size 16 :weight 'light)
+  doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 16)
+  doom-big-font (font-spec :family "Iosevka Term SS04" :size 36))
 (setq doom-theme 'modus-vivendi
   doom-font (font-spec :family "Iosevka Term SS04" :size 32 :weight 'light)
   doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 32)
-  doom-big-font (font-spec :family "Iosevka Term SS04" :size 72)
+  doom-big-font (font-spec :family "Iosevka Term SS04" :size 72))
 )
 (setq-default line-spacing 0.24)
-(setq-default mode-line-format
-                (cons (propertize "\u200b" 'display '((raise -0.35) (height 1.4))) mode-line-format))
-
-(modify-all-frames-parameters
-'((right-divider-width . 10)
- (internal-border-width . 10)))
-(dolist (face '(window-divider
-               window-divider-first-pixel
-                window-divider-last-pixel))
-(face-spec-reset-face face)
-(set-face-foreground face (face-attribute 'default :background)))
-(set-face-background 'fringe (face-attribute 'default :background))
-(good-scroll-mode 1)
-
-(use-package! theme-magic
-  :commands theme-magic-from-emacs
-  :config
-  (defadvice! theme-magic--auto-extract-16-doom-colors ()
-    :override #'theme-magic--auto-extract-16-colors
-    (list
-     (face-attribute 'default :background)
-     (doom-color 'error)
-     (doom-color 'success)
-     (doom-color 'type)
-     (doom-color 'keywords)
-     (doom-color 'constants)
-     (doom-color 'functions)
-     (face-attribute 'default :foreground)
-     (face-attribute 'shadow :foreground)
-     (doom-blend 'base8 'error 0.1)
-     (doom-blend 'base8 'success 0.1)
-     (doom-blend 'base8 'type 0.1)
-     (doom-blend 'base8 'keywords 0.1)
-     (doom-blend 'base8 'constants 0.1)
-     (doom-blend 'base8 'functions 0.1)
-     (face-attribute 'default :foreground))))
 
 (setq scroll-margin 2
       auto-save-default t
       display-line-numbers-type nil
-      delete-by-moving-to-trash t
+      auth-source-cache-expiry nil
+      starttls-use-gnutls t
+      mac-right-option-modifier 'meta
+      global-subword-mode t ; Iterate through CamelCase words
+      delete-by-moving-to-trash t                      ; Delete files to trash
+      window-combination-resize t                      ; take new window space from all other windows (not just current)
+      x-stretch-cursor t
+      avy-all-windows t
+      good-scroll-mode t
+      evil-escape-key-sequence "fd"
+      gnutls-verify-error nil
       truncate-string-ellipsis "…"
       browse-url-browser-function 'xwidget-webkit-browse-url)
-(global-subword-mode 1)
 
 (after! mu4e
   (setq mu4e-index-cleanup nil
@@ -111,7 +75,6 @@
         org-log-into-drawer t
         org-tags-column -80
         org-ellipsis "⚡⚡⚡"
-        org-superstar-headline-bullets-list '("⁖" "◉" "○" "✸" "✿")
         org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))
         org-todo-keyword-faces
         '(

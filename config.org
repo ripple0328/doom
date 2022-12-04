@@ -1,5 +1,4 @@
 #+title: Emacs Configuration
-
 * Introduction
 * Initial
 ** Basic
@@ -20,29 +19,17 @@
 #+end_src
 ** Visual
 #+begin_src emacs-lisp :tangle yes
-(if (eq system-type 'darwin) (
+(if (eq system-type 'darwin)
 (setq doom-theme 'modus-vivendi
   doom-font (font-spec :family "Iosevka Term SS04" :size 16 :weight 'light)
   doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 16)
-  doom-big-font (font-spec :family "Iosevka Term SS04" :size 36)
-)
-) (
+  doom-big-font (font-spec :family "Iosevka Term SS04" :size 36))
 (setq doom-theme 'modus-vivendi
   doom-font (font-spec :family "Iosevka Term SS04" :size 32 :weight 'light)
   doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 32)
-  doom-big-font (font-spec :family "Iosevka Term SS04" :size 72)
+  doom-big-font (font-spec :family "Iosevka Term SS04" :size 72))
 )
-                                 ))
 (setq-default line-spacing 0.24)
-(modify-all-frames-parameters
-'((right-divider-width . 10)
- (internal-border-width . 10)))
-(dolist (face '(window-divider
-               window-divider-first-pixel
-                window-divider-last-pixel))
-(face-spec-reset-face face)
-(set-face-foreground face (face-attribute 'default :background)))
-(set-face-background 'fringe (face-attribute 'default :background))
 #+end_src
 ** Functional Configuration
 #+begin_src emacs-lisp :tangle yes
@@ -52,7 +39,7 @@
       auth-source-cache-expiry nil
       starttls-use-gnutls t
       mac-right-option-modifier 'meta
-      global-subword-mode 1 ; Iterate through CamelCase words
+      global-subword-mode t ; Iterate through CamelCase words
       delete-by-moving-to-trash t                      ; Delete files to trash
       window-combination-resize t                      ; take new window space from all other windows (not just current)
       x-stretch-cursor t
@@ -105,7 +92,6 @@
         org-log-into-drawer t
         org-tags-column -80
         org-ellipsis "⚡⚡⚡"
-        org-superstar-headline-bullets-list '("⁖" "◉" "○" "✸" "✿")
         org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))
         org-todo-keyword-faces
         '(
