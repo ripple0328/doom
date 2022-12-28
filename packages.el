@@ -13,3 +13,4 @@
 (package! command-log-mode)
 (package! just-mode)
 (package! good-scroll)
+(package! sxhkdrc-mode)
