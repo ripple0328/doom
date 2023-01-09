@@ -7,7 +7,7 @@
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 (add-hook! '+doom-dashboard-functions :append
 (setq-hook! '+doom-dashboard-mode-hook evil-normal-state-cursor (list nil))
-(setq fancy-splash-image (concat doom-user-dir "vagabond.png")))
+(setq fancy-splash-image (concat doom-user-dir "doomEmacsTokyoNight.svg")))
 
 (if (eq system-type 'darwin)
 (setq doom-theme 'modus-vivendi
@@ -37,6 +37,10 @@
       gnutls-verify-error nil
       truncate-string-ellipsis "…"
       browse-url-browser-function 'xwidget-webkit-browse-url)
+
+(use-package jest
+  :after (typescript-tsx-mode)
+  :hook (typescript-tsx-mode . jest-minor-mode))
 
 (after! mu4e
   (setq mu4e-index-cleanup nil
