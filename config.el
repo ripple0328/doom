@@ -8,6 +8,7 @@
 (add-hook! '+doom-dashboard-functions :append
 (setq-hook! '+doom-dashboard-mode-hook evil-normal-state-cursor (list nil))
 (setq fancy-splash-image (concat doom-user-dir "doomEmacsTokyoNight.svg")))
+(setq initial-frame-alist '((top . 1) (left . 120) (width . 143) (height . 55)))
 
 (if (eq system-type 'darwin)
 (setq doom-theme 'modus-vivendi
@@ -38,9 +39,10 @@
       truncate-string-ellipsis "…"
       browse-url-browser-function 'xwidget-webkit-browse-url)
 
-(use-package jest
-  :after (typescript-tsx-mode)
-  :hook (typescript-tsx-mode . jest-minor-mode))
+(use-package jest-test-mode
+  :ensure t
+  :commands jest-test-mode
+  :hook (typescript-tsx-mode js-mode typescript-mode))
 
 (after! mu4e
   (setq mu4e-index-cleanup nil

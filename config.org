@@ -16,6 +16,7 @@
 (add-hook! '+doom-dashboard-functions :append
 (setq-hook! '+doom-dashboard-mode-hook evil-normal-state-cursor (list nil))
 (setq fancy-splash-image (concat doom-user-dir "doomEmacsTokyoNight.svg")))
+(setq initial-frame-alist '((top . 1) (left . 120) (width . 143) (height . 55)))
 #+end_src
 ** Visual
 #+begin_src emacs-lisp :tangle yes
@@ -52,13 +53,12 @@
 #+end_src
 
 
-
-
 ** web development
 #+begin_src emacs-lisp :tangle yes
-(use-package jest
-  :after (typescript-tsx-mode)
-  :hook (typescript-tsx-mode . jest-minor-mode))
+(use-package jest-test-mode
+  :ensure t
+  :commands jest-test-mode
+  :hook (typescript-tsx-mode js-mode typescript-mode))
 #+end_src
 ** Mu4e
 #+begin_src emacs-lisp :tangle yes
