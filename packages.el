@@ -14,3 +14,4 @@
 (package! just-mode)
 (package! good-scroll)
 (package! sxhkdrc-mode)
+(package! jest)
