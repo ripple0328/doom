@@ -43,6 +43,10 @@
   :ensure t
   :commands jest-test-mode
   :hook (typescript-tsx-mode js-mode typescript-mode))
+(map! :leader
+      :mode (typescript-tsx-mode js-mode typescript-mode)
+      :desc "run test at point"
+      "m t t" #'jest-test-run-at-point)
 
 (after! mu4e
   (setq mu4e-index-cleanup nil
