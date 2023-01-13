@@ -146,6 +146,7 @@
 
 ** wakatime
 #+begin_src emacs-lisp :tangle yes
+(global-wakatime-mode)
 (setq  wakatime-cli-path "/opt/homebrew/bin/wakatime-cli"
   wakatime-api-key "waka_4a6bb692-ecb1-4a87-b177-46c29f24a451"
  )

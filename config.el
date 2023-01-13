@@ -117,8 +117,9 @@
 
 (setq treemacs-follow-mode t)
 
-(setq  wakatime-cli-path "/usr/local/bin/wakatime"
-  wakatime-api-key "4a6bb692-ecb1-4a87-b177-46c29f24a451"
+(global-wakatime-mode)
+(setq  wakatime-cli-path "/opt/homebrew/bin/wakatime-cli"
+  wakatime-api-key "waka_4a6bb692-ecb1-4a87-b177-46c29f24a451"
  )
 
 (setq
