@@ -150,7 +150,7 @@
 ** wakatime
 #+begin_src emacs-lisp :tangle yes
 (global-wakatime-mode)
-(setq wakatime-api-key "waka_4a6bb692-ecb1-4a87-b177-46c29f24a451")
+(setq wakatime-api-key "waka_00450dfa-9b4e-4da7-8201-b38591e00dfc")
 #+end_src
 ** easy hugo
 #+begin_src emacs-lisp :tangle yes
