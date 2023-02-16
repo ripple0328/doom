@@ -10,7 +10,6 @@
 (setq fancy-splash-image (concat doom-user-dir "doomEmacsTokyoNight.svg")))
 (setq initial-frame-alist '((top . 1) (left . 120) (width . 143) (height . 55)))
 
-(if (eq system-type 'darwin)
 (setq doom-theme 'modus-vivendi
   doom-font (font-spec :family "Iosevka Term SS04" :size 16 :weight 'light)
   doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 16)
@@ -19,7 +18,6 @@
   doom-font (font-spec :family "Iosevka Term SS04" :size 32 :weight 'light)
   doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 32)
   doom-big-font (font-spec :family "Iosevka Term SS04" :size 72))
-)
 (setq-default line-spacing 0.24)
 
 (setq scroll-margin 2
