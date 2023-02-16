@@ -122,9 +122,7 @@
 (setq treemacs-follow-mode t)
 
 (global-wakatime-mode)
-(setq  wakatime-cli-path "/opt/homebrew/bin/wakatime-cli"
-  wakatime-api-key "waka_4a6bb692-ecb1-4a87-b177-46c29f24a451"
- )
+(setq wakatime-api-key "waka_4a6bb692-ecb1-4a87-b177-46c29f24a451")
 
 (setq
   easy-hugo-basedir "~/Shared/Personal/blog/"
