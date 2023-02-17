@@ -10,14 +10,13 @@
 (setq fancy-splash-image (concat doom-user-dir "doomEmacsTokyoNight.svg")))
 (setq initial-frame-alist '((top . 1) (left . 120) (width . 143) (height . 55)))
 
-(setq doom-theme 'modus-vivendi
-  doom-font (font-spec :family "Iosevka Term SS04" :size 16 :weight 'light)
-  doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 16)
-  doom-big-font (font-spec :family "Iosevka Term SS04" :size 36))
-(setq doom-theme 'modus-vivendi
-  doom-font (font-spec :family "Iosevka Term SS04" :size 32 :weight 'light)
-  doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 32)
-  doom-big-font (font-spec :family "Iosevka Term SS04" :size 72))
+doom-font (font-spec :family "Iosevka Term SS04" :size 32 :weight 'light)
+doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 32)
+(if (eq system-type 'darwin)
+ (setq doom-theme 'modus-vivendi
+   doom-font (font-spec :family "Iosevka Term SS04" :size 16 :weight 'light)
+   doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 16)))
+)
 (setq-default line-spacing 0.24)
 
 (setq scroll-margin 2
@@ -122,7 +121,7 @@
 (setq treemacs-follow-mode t)
 
 (global-wakatime-mode)
-(setq wakatime-api-key "waka_4a6bb692-ecb1-4a87-b177-46c29f24a451")
+(setq wakatime-api-key "waka_00450dfa-9b4e-4da7-8201-b38591e00dfc")
 
 (setq
   easy-hugo-basedir "~/Shared/Personal/blog/"
