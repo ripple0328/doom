@@ -142,9 +142,14 @@ doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 32)
  "⭠ now ─────────────────────────────────────────────────")
 (global-org-modern-mode)
 #+end_src
+* Navigation
 ** Treemacs
 #+begin_src emacs-lisp :tangle yes
 (setq treemacs-follow-mode t)
+#+end_src
+** Dirvish
+#+begin_src emacs-lisp: tangle yes
+(use-package! dirvish)
 #+end_src
 
 ** wakatime

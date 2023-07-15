@@ -15,3 +15,4 @@
 (package! good-scroll)
 (package! sxhkdrc-mode)
 (package! jest-test-mode)
+(package! dirvish)
