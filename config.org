@@ -50,7 +50,6 @@ doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 32)
       browse-url-browser-function 'xwidget-webkit-browse-url)
 #+end_src
 
-
 ** web development
 #+begin_src emacs-lisp :tangle yes
 (use-package jest-test-mode
@@ -152,15 +151,10 @@ doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 32)
 (use-package! dirvish)
 #+end_src
 
-** wakatime
-#+begin_src emacs-lisp :tangle yes
-(global-wakatime-mode)
-(setq wakatime-api-key "waka_00450dfa-9b4e-4da7-8201-b38591e00dfc")
-#+end_src
 ** easy hugo
 #+begin_src emacs-lisp :tangle yes
 (setq
-  easy-hugo-basedir "~/Shared/Personal/blog/"
+;;  easy-hugo-basedir "~/Shared/Personal/blog/"
   easy-hugo-default-ext ".org"
   easy-hugo-org-header t
   easy-hugo-previewtime "300"

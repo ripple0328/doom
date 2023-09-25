@@ -6,7 +6,6 @@
 ;; (package! another-package :recipe (:fetcher github :repo "username/repo"))
 ;; (package! builtin-package :disable t)
 (package! easy-hugo)
-(package! wakatime-mode)
 (package! presentation)
 (package! org-jira)
 (package! org-modern)
