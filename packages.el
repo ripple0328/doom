@@ -8,7 +8,6 @@
 (package! easy-hugo)
 (package! presentation)
 (package! org-jira)
-(package! org-modern)
 (package! command-log-mode)
 (package! just-mode)
 (package! good-scroll)
