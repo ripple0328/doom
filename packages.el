@@ -7,7 +7,6 @@
 ;; (package! builtin-package :disable t)
 (package! easy-hugo)
 (package! presentation)
-(package! org-jira)
 (package! command-log-mode)
 (package! just-mode)
 (package! good-scroll)

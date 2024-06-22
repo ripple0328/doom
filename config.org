@@ -132,12 +132,7 @@ doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 32)
   easy-hugo-url "https://blog.qingbo.tech"
   )
 #+end_src
-** jira
-#+begin_src emacs-lisp :tangle yes
-(setq
- jiralib-url "https://rba.atlassian.net"
-)
-#+end_src
+
 ** keybinding
 #+begin_src emacs-lisp :tangle yes
 (map! :leader
