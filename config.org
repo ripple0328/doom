@@ -19,9 +19,6 @@
 (setq initial-frame-alist '((top . 1) (left . 120) (width . 143) (height . 55)))
 #+end_src
 
-#+RESULTS:
-: ((top . 1) (left . 120) (width . 143) (height . 55))
-
 ** Visual
 #+begin_src emacs-lisp :tangle yes
 (setq doom-theme 'modus-vivendi
