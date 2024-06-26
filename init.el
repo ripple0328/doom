@@ -147,12 +147,10 @@
        (org
         +dragndrop
         +gnuplot
-        +pandoc
         +noter
         +pomodoro
         +journal
         +pretty
-        +roam2
         +present)          ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
        plantuml          ; diagrams for confusing people more
