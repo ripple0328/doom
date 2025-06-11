@@ -25,13 +25,15 @@ async function main() {
 apt-get install -y build-essential autoconf texinfo libgtk-3-dev libwebkit2gtk-4.0-dev libxml2-dev \
 libpng-dev libjpeg-dev libgif-dev libxpm-dev libtiff-dev libncurses-dev \
 libgnutls28-dev libharfbuzz-dev libxcb-xfixes0-dev libicu-dev direnv docker.io \
-plantuml gnuplot ripgrep fd-find git && \
-cd /tmp && git clone --depth 1 --branch emacs-30.1-release https://git.savannah.gnu.org/git/emacs.git emacs-30.1 && \
-cd emacs-30.1 && ./autogen.sh && ./configure --with-x=no --without-pop && make -j$(nproc) && make install && \
+plantuml gnuplot ripgrep fd-find git curl tar && \
+cd /tmp && curl -fsSL https://ftp.gnu.org/gnu/emacs/emacs-30.1.tar.gz -o emacs-30.1.tar.gz && \
+tar xf emacs-30.1.tar.gz && cd emacs-30.1 && ./configure --with-x=no --without-pop && make -j$(nproc) && make install && \
 cd /workspace && git clone --depth=1 https://github.com/doomemacs/doom-emacs.git /root/.emacs.d && \
 /root/.emacs.d/bin/doom sync -e && \
-if [ ! -f /workspace/init.el ] && [ -f /workspace/early-init.el ]; then \
+if [ -f /workspace/early-init.el ]; then \
   emacs --batch --load /workspace/early-init.el; \
+elif [ -f /workspace/init.el ]; then \
+  emacs --batch --load /workspace/init.el; \
 else \
   emacs --batch -l /root/.emacs.d/init.el; \
 fi`
@@ -66,9 +68,9 @@ fi`
 apt-get install -y build-essential autoconf texinfo libgtk-3-dev libwebkit2gtk-4.0-dev libxml2-dev \
 libpng-dev libjpeg-dev libgif-dev libxpm-dev libtiff-dev libncurses-dev \
 libgnutls28-dev libharfbuzz-dev libxcb-xfixes0-dev libicu-dev direnv docker.io \
-plantuml gnuplot ripgrep fd-find git && \
-cd /tmp && git clone --depth 1 --branch emacs-30.1-release https://git.savannah.gnu.org/git/emacs.git emacs-30.1 && \
-cd emacs-30.1 && ./autogen.sh && ./configure --with-x=no --without-pop && make -j$(nproc) && make install`,
+plantuml gnuplot ripgrep fd-find git curl tar && \
+cd /tmp && curl -fsSL https://ftp.gnu.org/gnu/emacs/emacs-30.1.tar.gz -o emacs-30.1.tar.gz && \
+tar xf emacs-30.1.tar.gz && cd emacs-30.1 && ./configure --with-x=no --without-pop && make -j$(nproc) && make install`,
       ]);
     } else {
       console.log("⚠️ SKIP_DEPS=true; skipping dependencies installation");
@@ -90,7 +92,7 @@ cd emacs-30.1 && ./autogen.sh && ./configure --with-x=no --without-pop && make -
       skipDeps
         ? ["/root/.emacs.d/bin/doom", "--help"]
         : ["bash", "-lc",
-           "/root/.emacs.d/bin/doom sync -e && if [ ! -f /workspace/init.el ] && [ -f /workspace/early-init.el ]; then emacs --batch --load /workspace/early-init.el; else emacs --batch -l /root/.emacs.d/init.el; fi"
+           "/root/.emacs.d/bin/doom sync -e && if [ -f /workspace/early-init.el ]; then emacs --batch --load /workspace/early-init.el; elif [ -f /workspace/init.el ]; then emacs --batch --load /workspace/init.el; else emacs --batch -l /root/.emacs.d/init.el; fi"
         ]
     );
 
