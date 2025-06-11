@@ -4,4 +4,5 @@
 tmp/
 \#*
 config.el
+.dagger/cache/
 node_modules/
