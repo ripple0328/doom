@@ -6,11 +6,15 @@ on:
       - '**/*.el'
       - '**/*.org'
       - '.github/workflows/**'
+      - '.dagger/**' # Also run if Dagger configuration changes
+      - 'dagger.json'
   pull_request:
     paths:
       - '**/*.el'
       - '**/*.org'
       - '.github/workflows/**'
+      - '.dagger/**' # Also run if Dagger configuration changes
+      - 'dagger.json'
 
 jobs:
   test-doom-config:
@@ -21,13 +25,15 @@ jobs:
       - name: Checkout Doom config
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+      - name: Setup Dagger
+        uses: dagger/setup-dagger@v1 # Using v1, check for latest if possible
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run Doom Emacs CI pipeline
-        run: npm run pipeline
+      - name: Run Dagger pipeline
+        run: dagger call test --config-dir .
+        env:
+          # Optional: For Dagger Cloud, if you have it configured.
+          # DAGGER_CLOUD_TOKEN: ${{ secrets.DAGGER_CLOUD_TOKEN }}
+          # Ensure Dagger can access Docker if needed by the underlying functions
+          # (though our current Dagger functions build from scratch, Docker-in-Docker is not explicitly used by them)
+          # Some runners might require this if Dagger needs to spin up its own engine service via Docker.
+          # DOCKER_HOST: unix:///var/run/docker.sock # Example, may vary or not be needed
