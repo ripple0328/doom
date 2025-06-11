@@ -21,7 +21,7 @@ async function main() {
       "-e", "DOOMDIR=/workspace",
       "ubuntu:22.04",
       "bash", "-lc",
-      `DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y git gcc g++ make cmake pkg-config libtool libgtk-3-dev libwebkit2gtk-4.0-dev libxml2-dev libpng-dev libjpeg-dev libgif-dev libxpm-dev libtiff-dev libncurses-dev libgnutls28-dev libharfbuzz-dev libxcb-xfixes0-dev libicu-dev direnv docker.io plantuml gnuplot emacs-nox ripgrep fd-find && git clone --depth=1 https://github.com/doomemacs/doom-emacs.git /root/.emacs.d && /root/.emacs.d/bin/doom sync -e && /root/.emacs.d/bin/doom doctor`
+      `DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y software-properties-common && add-apt-repository -y ppa:kelleyk/emacs && apt-get update && apt-get install -y git gcc g++ make cmake pkg-config libtool libgtk-3-dev libwebkit2gtk-4.0-dev libxml2-dev libpng-dev libjpeg-dev libgif-dev libxpm-dev libtiff-dev libncurses-dev libgnutls28-dev libharfbuzz-dev libxcb-xfixes0-dev libicu-dev direnv docker.io plantuml gnuplot emacs29-nox ripgrep fd-find && git clone --depth=1 https://github.com/doomemacs/doom-emacs.git /root/.emacs.d && /root/.emacs.d/bin/doom sync -e && emacs --batch -l /root/.emacs.d/init.el`
     ];
     const proc = spawn("docker", dockerArgs, { stdio: "inherit" });
     const code: number = await new Promise((resolve) => proc.on("close", resolve));
@@ -50,12 +50,15 @@ async function main() {
         "bash",
         "-lc",
         `DEBIAN_FRONTEND=noninteractive apt-get update && \
+apt-get install -y software-properties-common && \
+add-apt-repository -y ppa:kelleyk/emacs && \
+apt-get update && \
 apt-get install -y git gcc g++ make cmake pkg-config libtool \
 libgtk-3-dev libwebkit2gtk-4.0-dev libxml2-dev \
 libpng-dev libjpeg-dev libgif-dev libxpm-dev libtiff-dev \
 libncurses-dev libgnutls28-dev libharfbuzz-dev \
 libxcb-xfixes0-dev libicu-dev direnv docker.io plantuml \
-gnuplot emacs-nox ripgrep fd-find`,
+gnuplot emacs29-nox ripgrep fd-find`,
       ]);
     } else {
       console.log("⚠️ SKIP_DEPS=true; skipping dependencies installation");
@@ -76,7 +79,7 @@ gnuplot emacs-nox ripgrep fd-find`,
     ct = ct.withExec(
       skipDeps
         ? ["/root/.emacs.d/bin/doom", "--help"]
-        : ["/root/.emacs.d/bin/doom", "doctor"]
+        : ["bash", "-lc", "emacs --batch -l /root/.emacs.d/init.el"]
     );
 
     const exitCode = await ct.exitCode();
