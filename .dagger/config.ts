@@ -30,13 +30,7 @@ cd /tmp && curl -fsSL https://ftp.gnu.org/gnu/emacs/emacs-30.1.tar.gz -o emacs-3
 tar xf emacs-30.1.tar.gz && cd emacs-30.1 && ./configure --with-x=no --without-pop && make -j$(nproc) && make install && \
 cd /workspace && git clone --depth=1 https://github.com/doomemacs/doom-emacs.git /root/.emacs.d && \
 /root/.emacs.d/bin/doom sync -e && \
-if [ -f /workspace/early-init.el ]; then \
-  emacs --batch --load /workspace/early-init.el; \
-elif [ -f /workspace/init.el ]; then \
-  emacs --batch --load /workspace/init.el; \
-else \
-  emacs --batch -l /root/.emacs.d/init.el; \
-fi`
+emacs --batch -l /root/.emacs.d/init.el`
     ];
     const proc = spawn("docker", dockerArgs, { stdio: "inherit" });
     const code: number = await new Promise((resolve) => proc.on("close", resolve));
@@ -87,7 +81,7 @@ tar xf emacs-30.1.tar.gz && cd emacs-30.1 && ./configure --with-x=no --without-p
       skipDeps
         ? ["/root/.emacs.d/bin/doom", "--help"]
         : ["bash", "-lc",
-           "set -e; /root/.emacs.d/bin/doom sync -e && if [ -f /workspace/early-init.el ]; then emacs --batch --load /workspace/early-init.el; elif [ -f /workspace/init.el ]; then emacs --batch --load /workspace/init.el; else emacs --batch -l /root/.emacs.d/init.el; fi"
+           "set -e; /root/.emacs.d/bin/doom sync -e && emacs --batch -l /root/.emacs.d/init.el"
         ]
     );
 
