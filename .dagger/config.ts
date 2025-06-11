@@ -2,10 +2,9 @@
 import fs from "fs";
 import path from "path";
 import { spawn } from "child_process";
-// import { connect } from "@dagger.io/dagger";
+import { connect } from "@dagger.io/dagger";
 
 async function main() {
-  const { connect } = await import("@dagger.io/dagger");
   const dockerHostEnv = process.env.DOCKER_HOST;
   const defaultSock = "/var/run/docker.sock";
   if (dockerHostEnv || fs.existsSync(defaultSock)) {

@@ -2,8 +2,9 @@
   "name": "doom-dagger-pipeline",
   "version": "0.1.0",
   "description": "Dagger pipeline for testing Doom Emacs configuration",
+  "type": "module",
   "scripts": {
-    "pipeline": "npx ts-node --transpile-only .dagger/config.ts"
+    "pipeline": "node --loader ts-node/esm .dagger/config.ts"
   },
   "dependencies": {
     "@dagger.io/dagger": "^0.18.0"
