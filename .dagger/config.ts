@@ -21,7 +21,7 @@ async function main() {
       "-e", "DOOMDIR=/workspace",
       "ubuntu:22.04",
       "bash", "-lc",
-      `DEBIAN_FRONTEND=noninteractive apt-get update && \
+      `set -e; DEBIAN_FRONTEND=noninteractive apt-get update && \
 apt-get install -y build-essential autoconf texinfo libgtk-3-dev libwebkit2gtk-4.0-dev libxml2-dev \
 libpng-dev libjpeg-dev libgif-dev libxpm-dev libtiff-dev libncurses-dev \
 libgnutls28-dev libharfbuzz-dev libxcb-xfixes0-dev libicu-dev direnv docker.io \
@@ -86,13 +86,8 @@ tar xf emacs-30.1.tar.gz && cd emacs-30.1 && ./configure --with-x=no --without-p
     ct = ct.withExec(
       skipDeps
         ? ["/root/.emacs.d/bin/doom", "--help"]
-        : ["/root/.emacs.d/bin/doom", "sync", "-e"]
-    );
-    ct = ct.withExec(
-      skipDeps
-        ? ["/root/.emacs.d/bin/doom", "--help"]
         : ["bash", "-lc",
-           "/root/.emacs.d/bin/doom sync -e && if [ -f /workspace/early-init.el ]; then emacs --batch --load /workspace/early-init.el; elif [ -f /workspace/init.el ]; then emacs --batch --load /workspace/init.el; else emacs --batch -l /root/.emacs.d/init.el; fi"
+           "set -e; /root/.emacs.d/bin/doom sync -e && if [ -f /workspace/early-init.el ]; then emacs --batch --load /workspace/early-init.el; elif [ -f /workspace/init.el ]; then emacs --batch --load /workspace/init.el; else emacs --batch -l /root/.emacs.d/init.el; fi"
         ]
     );
 
