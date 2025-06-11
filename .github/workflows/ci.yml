@@ -2,6 +2,8 @@ name: Doom Emacs CI
 
 on:
   push:
+    branches: # Added
+      - main   # Added
     paths:
       - '**/*.el'
       - '**/*.org'
