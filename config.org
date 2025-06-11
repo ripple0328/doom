@@ -14,7 +14,7 @@
 #+begin_src emacs-lisp :tangle yes
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 (add-hook! '+doom-dashboard-functions :append
-(setq-hook! '+doom-dashboard-mode-hook evil-normal-state-cursor (list nil))
+;; (setq-hook! '+doom-dashboard-mode-hook evil-normal-state-cursor (list nil))
 (setq fancy-splash-image (concat doom-user-dir "butterfly.svg")))
 (setq initial-frame-alist '((top . 1) (left . 120) (width . 143) (height . 55)))
 #+end_src
@@ -46,17 +46,14 @@ doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 32)
       avy-all-windows t
       good-scroll-mode t
       evil-escape-key-sequence "fd"
-      gnutls-verify-error nil
+      gnutls-verify-error t
       truncate-string-ellipsis "…"
       browse-url-browser-function 'xwidget-webkit-browse-url)
 #+end_src
 
 ** web development
 #+begin_src emacs-lisp :tangle yes
-(use-package jest-test-mode
-  :ensure t
-  :commands jest-test-mode
-  :hook (typescript-tsx-mode js-mode typescript-mode))
+(add-hook! '(typescript-tsx-mode-hook js-mode-hook typescript-mode-hook) #'jest-test-mode)
 #+end_src
 ** Mu4e
 #+begin_src emacs-lisp :tangle yes
@@ -114,7 +111,8 @@ doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 32)
 * Navigation
 ** Treemacs
 #+begin_src emacs-lisp :tangle yes
-(setq treemacs-follow-mode t)
+(after! treemacs
+  (setq treemacs-follow-mode t))
 #+end_src
 ** Dirvish
 #+begin_src emacs-lisp: tangle yes
