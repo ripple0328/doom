@@ -30,10 +30,3 @@ jobs:
 
       - name: Run Dagger pipeline
         run: dagger call test --config-dir .
-        env:
-          # Optional: For Dagger Cloud, if you have it configured.
-          # DAGGER_CLOUD_TOKEN: ${{ secrets.DAGGER_CLOUD_TOKEN }}
-          # Ensure Dagger can access Docker if needed by the underlying functions
-          # (though our current Dagger functions build from scratch, Docker-in-Docker is not explicitly used by them)
-          # Some runners might require this if Dagger needs to spin up its own engine service via Docker.
-          # DOCKER_HOST: unix:///var/run/docker.sock # Example, may vary or not be needed
