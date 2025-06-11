@@ -14,35 +14,20 @@ on:
 
 jobs:
   test-doom-config:
-    name: Test Doom Emacs config boot
+    name: Test Doom Emacs config boot via Dagger
     runs-on: ubuntu-latest
-    env:
-      DOOMDIR: ${{ github.workspace }}
-      GIT_AUTHOR_NAME: github-actions
-      GIT_AUTHOR_EMAIL: github-actions@github.com
-      GIT_COMMITTER_NAME: github-actions
-      GIT_COMMITTER_EMAIL: github-actions@github.com
+
     steps:
       - name: Checkout Doom config
         uses: actions/checkout@v3
 
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            git \
-            gcc g++ make cmake pkg-config libtool \
-            libgtk-3-dev libwebkit2gtk-4.0-dev libxml2-dev \
-            libpng-dev libjpeg-dev libgif-dev libxpm-dev \
-            libtiff-dev libncurses-dev libgnutls28-dev \
-            libharfbuzz-dev libxcb-xfixes0-dev libicu-dev \
-            direnv docker.io plantuml gnuplot
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
-      - name: Clone Doom Emacs core
-        run: git clone --depth 1 https://github.com/doomemacs/doom-emacs ~/.emacs.d
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Sync Doom Emacs config
-        run: ~/.emacs.d/bin/doom sync -e
-
-      - name: Run Doom doctor
-        run: ~/.emacs.d/bin/doom doctor
+      - name: Run Doom Emacs CI pipeline
+        run: npm run pipeline
