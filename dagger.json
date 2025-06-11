@@ -1,0 +1,6 @@
+{
+  "name": "doom-dagger-pipeline",
+  "version": "0.1.0",
+  "sdk": "typescript",
+  "include": [".dagger/config.ts"]
+}
