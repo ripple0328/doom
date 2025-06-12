@@ -53,6 +53,7 @@ The core of the CI logic resides in this TypeScript file, executed by `ts-node`.
     -   Specifies `"type": "module"`, indicating the project uses ES Module syntax.
 -   **`tsconfig.json`**: Configures the TypeScript compiler options. It's set up for an ES Module project (`"module": "NodeNext"`).
 -   **`dagger.json`**: Dagger project file specifying the project name, SDK (typescript), and the main source file (`.dagger/config.ts`).
+-   **`config.org`**: Literate configuration tangled to `config.el` for Doom.
 
 ## Local Execution
 
