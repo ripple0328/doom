@@ -73,3 +73,8 @@ To run the Dagger pipeline locally (assuming you have Node.js, npm, and Dagger C
         ```bash
         SKIP_DEPS=true npm run pipeline
         ```
+
+
+## User Identity
+
+Set `USER_FULL_NAME` and `USER_MAIL_ADDRESS` environment variables to populate your personal information when Emacs starts. The configuration defaults to empty strings if these variables are unset.

@@ -6,8 +6,8 @@ blocks tangle to config.el for use by Doom.
 * Setup
 ** Basic Setup
 #+begin_src emacs-lisp 
-(setq user-full-name    "Zhang Qingbo"
-      user-mail-address "ripple0328@gmail.com"
+(setq user-full-name    (or (getenv "USER_FULL_NAME") "")
+      user-mail-address (or (getenv "USER_MAIL_ADDRESS") "")
       auth-sources '("~/.authinfo.gpg")
       major-mode 'org-mode
 )
@@ -76,7 +76,7 @@ Configuration for mu4e and Gmail.
         message-send-mail-function 'smtpmail-send-it
         mu4e-maildir-shortcuts '((
                                 :maildir "/inbox" :key ?i))
-        smtpmail-auth-credentials '(("smtp.gmail.com" 587 "ripple0328@gmail.com" nil))
+        smtpmail-auth-credentials (list (list "smtp.gmail.com" 587 user-mail-address nil))
         smtpmail-default-smtp-server "smtp.gmail.com"
         smtpmail-smtp-server "smtp.gmail.com"
         smtpmail-smtp-service 587)
@@ -86,10 +86,10 @@ Configuration for mu4e and Gmail.
     (mu4e-drafts-folder     . "/Gmail/Drafts")
     (mu4e-trash-folder      . "/Gmail/Trash")
     (mu4e-refile-folder     . "/Gmail/All Mail")
-    (smtpmail-smtp-user     . "ripple0328@gmail.com")
+    (smtpmail-smtp-user     . user-mail-address)
     (mu4e-get-mail-command  . "mbsync --all")
-    (user-mail-address      . "ripple0328@gmail.com")    ;; only needed for mu < 1.4
-    (mu4e-compose-signature . "---\n Qingbo Zhang"))
+    (user-mail-address      . user-mail-address)
+    (mu4e-compose-signature . (or (getenv "EMAIL_SIGNATURE") "") )
   )
 )
 #+end_src
