@@ -1,5 +1,7 @@
 # Doom Emacs Configuration with Reproducible CI
 
+[![Doom Emacs CI](https://github.com/ripple0328/.doom.d/actions/workflows/ci.yml/badge.svg)](https://github.com/ripple0328/.doom.d/actions/workflows/ci.yml)
+
 This repository (`.doom.d`) contains a **literate Doom Emacs configuration** plus a **Dagger-powered CI pipeline** that validates every change inside a container.
 The goal is an Emacs setup that is **portable, testable, and free of personal data** in version control.
 
