@@ -1,49 +1,38 @@
-# Doom Emacs Dagger CI Pipeline
+# Doom Emacs Configuration with Reproducible CI
 
-This project provides a Dagger.io based CI pipeline for testing a Doom Emacs configuration. It ensures that the Emacs configuration, along with Doom Emacs, can be successfully built, initialized, and that user init files can be loaded without batch errors.
+This repository (`.doom.d`) contains a **literate Doom Emacs configuration** plus a **Dagger-powered CI pipeline** that validates every change inside a container.
+The goal is an Emacs setup that is **portable, testable, and free of personal data** in version control.
 
-## How it Works
+## Repository Layout
 
-The CI process is orchestrated through a GitHub Actions workflow that utilizes a Dagger pipeline defined in TypeScript.
+| Path | Purpose |
+|------|---------|
+| `config.org` | Main literate configuration (tangled into Lisp on `doom sync`) |
+| `config.local.el` | **Untracked** personal overrides (created locally) |
+| `init.el` | Doom module list (generated from template) |
+| `.dagger/config.ts` | Container recipe used by CI & local `npm run pipeline` |
+| `.github/workflows/ci.yml` | GitHub Actions runner that executes the Dagger pipeline |
+| `.gitignore` | Explicitly ignores `config.local.el`, cache folders, etc. |
 
-### GitHub Actions Workflow (`.github/workflows/ci.yml`)
+---
 
--   **Trigger**: The workflow runs on pushes or pull requests that modify Emacs Lisp files (`**/*.el`), Org files (`**/*.org`), or the workflow files themselves (`.github/workflows/**`).
--   **Environment**: It runs on an `ubuntu-latest` runner.
--   **Steps**:
-    1.  **Checkout Code**: Checks out the repository content.
-    2.  **Setup Node.js**: Sets up Node.js version 18.
-    3.  **Install Dependencies**: Runs `npm ci` to install Node.js dependencies defined in `package-lock.json` (primarily `@dagger.io/dagger`, `ts-node`, `typescript`).
-    4.  **Run Pipeline**: Executes `npm run pipeline`, which in turn runs the Dagger pipeline script (`.dagger/config.ts`).
+## How We Keep Personal Information Secure
 
-### Dagger Pipeline (`.dagger/config.ts`)
+1. **Environment variables first**
+   All user-specific values (name, email, API tokens, file paths) are read from the environment when available.
 
-The core of the CI logic resides in this TypeScript file, executed by `ts-node`. It has two main modes of operation:
+2. **Local overrides in `config.local.el`**
+   A file that lives next to `config.org`, is loaded at startup, but is *never* committed (see `.gitignore`).
+   Use it to set `user-full-name`, `user-mail-address`, SMTP settings, API keys, etc.
 
-1.  **Docker Fallback Mode**:
-    -   This mode is activated if a local Docker daemon is accessible (via `DOCKER_HOST` environment variable or the default `/var/run/docker.sock` socket).
-    -   It directly uses `docker run` with an `ubuntu:22.04` image.
-    -   **Key operations**:
-        -   Mounts the current project directory into `/workspace` in the container.
-        -   Sets the `DOOMDIR` environment variable to `/workspace`.
-        -   Installs system dependencies (build tools, X11/GTK libs for Emacs, etc.) and Emacs 30.1 from source (compiled without X support, `--with-x=no --without-pop`).
-        -   Clones the Doom Emacs repository (`https://github.com/doomemacs/doom-emacs.git`) into `/root/.emacs.d`.
-        -   Runs `doom sync -e` to synchronize the Doom Emacs configuration.
-        -   Attempts to load user init files in batch mode: first `/workspace/early-init.el`, then `/workspace/init.el`. If neither exists, it falls back to loading Doom's default init file (`/root/.emacs.d/init.el`).
-        -   The script uses `set -e` to ensure any command failure leads to a non-zero exit code.
+3. **Encrypted credentials via `auth-source`**
+   Passwords belong in `~/.authinfo.gpg` (or the file pointed to by `$AUTHINFO_FILE`).
+   Emacs decrypts it on demand; the plaintext never touches the repo.
 
-2.  **Dagger SDK Mode**:
-    -   If a local Docker daemon isn't detected, the script uses the `@dagger.io/dagger` TypeScript SDK to define and run the pipeline (e.g., in Dagger Cloud or a local Dagger Engine).
-    -   **Key operations**:
-        -   Utilizes an `ubuntu:22.04` base container.
-        -   Mounts the project source into `/workspace`.
-        -   Sets `DOOMDIR=/workspace`.
-        -   Optionally installs system dependencies and Emacs 30.1 (same as Docker fallback mode), unless `SKIP_DEPS=true` is set in the environment.
-        -   Clones Doom Emacs into `/root/.emacs.d`.
-        -   Runs `doom sync -e` and then attempts to load user init files or the default Doom init file in batch mode (similar to the Docker fallback).
-        -   The script also uses `set -e` for robustness.
+4. **Automated checks**
+   The CI container loads the config in batch mode.  If private data were hard-coded, the pipeline would fail on other machines, making leaks obvious.
 
-## Key Files and Their Roles
+---
 
 -   **`.dagger/config.ts`**: Contains the main Dagger pipeline logic written in TypeScript. This script defines the steps to build Emacs, set up Doom Emacs, and test the configuration.
 -   **`.github/workflows/ci.yml`**: Defines the GitHub Actions workflow that triggers the CI pipeline on relevant file changes.
@@ -54,10 +43,11 @@ The core of the CI logic resides in this TypeScript file, executed by `ts-node`.
 -   **`tsconfig.json`**: Configures the TypeScript compiler options. It's set up for an ES Module project (`"module": "NodeNext"`).
 -   **`dagger.json`**: Dagger project file specifying the project name, SDK (typescript), and the main source file (`.dagger/config.ts`).
 -   **`config.org`**: Literate configuration tangled to `config.el` for Doom.
+## Setting Up Environment Variables
 
-## Local Execution
+You may export variables in your shell profile (`.zshrc`, `.bashrc`) **or** use [direnv](https://direnv.net/) for per-project scopes.
 
-To run the Dagger pipeline locally (assuming you have Node.js, npm, and Dagger CLI installed, or Docker for the fallback mode):
+Examples:
 
 1.  **Install Node.js dependencies**:
     ```bash
@@ -78,3 +68,99 @@ To run the Dagger pipeline locally (assuming you have Node.js, npm, and Dagger C
 ## User Identity
 
 Set `USER_FULL_NAME` and `USER_MAIL_ADDRESS` environment variables to populate your personal information when Emacs starts. The configuration defaults to empty strings if these variables are unset.
+```bash
+# Generic identity
+export EMACS_USER_NAME="John Doe"
+export EMACS_USER_EMAIL="john@example.com"
+
+# Mail / SMTP
+export EMACS_SMTP_USER="john@example.com"
+export EMACS_SMTP_PASSWORD="app-password-here"   # Prefer auth-source, see below
+
+# Org notes location
+export ORG_NOTES_DIR="$HOME/Documents/notes"
+
+# Tokens
+export GITHUB_TOKEN="ghp_…"
+```
+
+Variables are read in `config.org` *before* anything else, so they are available to all later code.
+
+---
+
+## Local Configuration Loader
+
+During tangling `config.org` writes the snippet:
+
+```elisp
+(let ((local (expand-file-name "config.local.el" doom-user-dir)))
+  (when (file-exists-p local)
+    (load local)))
+```
+
+At startup Emacs:
+
+1. Looks for `~/.doom.d/config.local.el`.
+2. Loads it **after** basic defaults so you can override any variable or call arbitrary Emacs Lisp.
+3. Continues with the rest of the configuration.
+
+Because the file is ignored by Git, you are free to place individualized or experimental code here.
+
+### Creating a Skeleton
+
+```elisp
+;;; ~/.doom.d/config.local.el -*- lexical-binding: t; -*-
+
+(setq user-full-name  (or (getenv "EMACS_USER_NAME")  "John Doe")
+      user-mail-address (or (getenv "EMACS_USER_EMAIL") "john@example.com"))
+
+;; Example mu4e setup
+(after! mu4e
+  (set-email-account! "Gmail"
+    `((smtpmail-smtp-user     . ,user-mail-address)
+      ;; …
+      )))
+```
+
+---
+
+## Encrypted Authentication File (`~/.authinfo.gpg`)
+
+`auth-source` automatically reads credentials from an **encrypted** netrc-style file.
+
+1. Install `gpg` and create a GPG key if you do not have one.
+2. Create `~/.authinfo` with entries like:
+
+   ```
+   machine smtp.gmail.com login john@example.com password app-password-here port 587
+   ```
+
+3. Run
+
+   ```bash
+   gpg -c ~/.authinfo   # or use gpg --encrypt --recipient <KEYID>
+   rm ~/.authinfo       # keep only the .gpg file
+   ```
+
+4. Ensure the path is correct (default `~/.authinfo.gpg` or set `$AUTHINFO_FILE`).
+5. Emacs decrypts it transparently when SMTP or other packages request credentials.
+
+---
+
+## Quick Start
+
+```bash
+git clone <repo> ~/.doom.d
+cd ~/.doom.d
+npm install          # installs dagger dependencies
+doom sync            # tangle & install packages
+npm run pipeline     # run the CI container locally
+```
+
+Open Emacs and enjoy a secure, reproducible setup!
+
+---
+
+## Contributing
+
+PRs and issues are welcome—but **never check in personal secrets**.  Follow the security model above and run `npm run pipeline` before pushing.

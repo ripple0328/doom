@@ -5,17 +5,45 @@ This org file contains the literate Doom Emacs configuration. All code
 blocks tangle to config.el for use by Doom.
 * Setup
 ** Basic Setup
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setq user-full-name    (or (getenv "USER_FULL_NAME") "")
       user-mail-address (or (getenv "USER_MAIL_ADDRESS") "")
       auth-sources '("~/.authinfo.gpg")
       major-mode 'org-mode
 )
 
+* Secure Configuration Practices
+It is important to keep personal data such as real names, email
+addresses, API keys or tokens **out of version control**.  This
+configuration follows these rules:
+1.  Sensitive values live in environment variables or in a local file
+     ~config.local.el~ which is *not* tracked by Git.
+2.  Credentials are stored in =~/.authinfo.gpg= (or the file specified
+    by the =$AUTHINFO_FILE= environment variable) so they remain
+    encrypted at rest.
+3.  Before committing, ensure no personal information leaks into
+    tracked files.
+
+* Introduction
+* Initial
+** Basic
+#+begin_src emacs-lisp :tangle yes
+(setq auth-sources (list (or (getenv "AUTHINFO_FILE") "~/.authinfo.gpg"))
+      major-mode 'org-mode)
+
+
+** Load local configuration
+# This file (ignored by Git) may redefine personal variables such as
+# `user-full-name', `user-mail-address', or mail settings.
+# +begin_src emacs-lisp :tangle yes
+(let ((local (expand-file-name "config.local.el" doom-user-dir)))
+  (when (file-exists-p local)
+    (load local)))
+# +end_src
 #+end_src
 ** Dashboard
 The Doom dashboard is customized with a splash image and no shortmenu.
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 (add-hook! '+doom-dashboard-functions :append
 (setq-hook! '+doom-dashboard-mode-hook evil-normal-state-cursor (list nil))
@@ -25,7 +53,7 @@ The Doom dashboard is customized with a splash image and no shortmenu.
 
 ** Visual
 Theme and font settings for a consistent look across systems.
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setq doom-theme 'modus-vivendi
 doom-font (font-spec :family "Iosevka Term SS04" :size 32 :weight 'light)
 doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 32)
@@ -38,7 +66,7 @@ doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 32)
 #+end_src
 ** Core Behaviors
 General editor behaviour tweaks.
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setq scroll-margin 2
       auto-save-default t
       display-line-numbers-type nil
@@ -59,15 +87,16 @@ General editor behaviour tweaks.
 
 ** Web Development
 Minor helpers for JS and TS workflows.
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (use-package jest-test-mode
   :ensure t
   :commands jest-test-mode
   :hook (typescript-tsx-mode js-mode typescript-mode))
 #+end_src
+<<<<<<< HEAD
 ** Email
 Configuration for mu4e and Gmail.
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (after! mu4e
   (setq mu4e-index-cleanup nil
         mu4e-index-lazy-check t
@@ -95,13 +124,20 @@ Configuration for mu4e and Gmail.
 #+end_src
 ** Org Mode
 Productivity features for Org.
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
+=======
+** Mu4e
+# Removed – email settings now live in =config.local.el= to keep
+# personal information out of version control.
+** Org
+#+begin_src emacs-lisp :tangle yes
+>>>>>>> 734c47a (update)
  (after! org
    (map! :map org-mode-map
          :n "M-j" #'org-metadown
          :n "M-k" #'org-metaup)
-   (setq org-directory "~/Documents/notes/"
-         org-agenda-files (directory-files-recursively "~/Documents/notes/" "\\.org$")
+   (setq org-directory (or (getenv "ORG_NOTES_DIR") "~/Documents/notes/")
+         org-agenda-files (directory-files-recursively org-directory "\\.org$")
          org-log-done 'time
          org-agenda-start-with-log-mode t
          org-log-into-drawer t
@@ -124,7 +160,7 @@ Productivity features for Org.
 Tools to move around projects.
 ** Treemacs
 File tree viewer.
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (setq treemacs-follow-mode t)
 #+end_src
 ** Dirvish
@@ -135,10 +171,9 @@ Modern dired replacement.
 
 ** Keybindings
 Custom leader mappings.
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (map! :leader
       :desc "other window"
       "w o" #'other-window)
 
 #+end_src
-
