@@ -42,10 +42,7 @@ jobs:
             env_flags: ""        # full pipeline, no extra flags
 
     # Only run the **full** test on main branch or pull-requests
-    if: |
-      matrix.test_type != 'full' ||
-      github.ref == 'refs/heads/main' ||
-      github.event_name == 'pull_request'
+    if: ${{ matrix.test_type != 'full' || github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
 
     steps:
       #-------------------------------------------------------------
