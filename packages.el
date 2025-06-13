@@ -5,10 +5,29 @@
 ;; (package! some-package)
 ;; (package! another-package :recipe (:fetcher github :repo "username/repo"))
 ;; (package! builtin-package :disable t)
-(package! presentation)
-(package! command-log-mode)
-(package! just-mode)
-(package! good-scroll)
-(package! sxhkdrc-mode)
-(package! jest-test-mode)
-(package! dirvish)
+
+;;; ---------------------------------------------------------------------------
+;;;  UI / Presentation helpers
+;;; ---------------------------------------------------------------------------
+(package! presentation        ; Minimalist slides inside Emacs
+  )
+(package! good-scroll         ; Pixel-perfect, smooth scrolling
+  )
+
+;;; ---------------------------------------------------------------------------
+;;;  Development workflow tools
+;;; ---------------------------------------------------------------------------
+(package! command-log-mode    ; Show command/key history (great for demos)
+  )
+(package! jest-test-mode      ; Run Jest tests from inside Emacs
+  )
+(package! just-mode           ; Major-mode for Justfile build scripts
+  )
+
+;;; ---------------------------------------------------------------------------
+;;;  File-manager replacements
+;;; ---------------------------------------------------------------------------
+(package! dirvish             ; Modern dired UI with extra niceties
+  )
+(package! sxhkdrc-mode        ; Syntax highlighting for sxhkd hotkey config
+  )

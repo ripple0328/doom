@@ -13,6 +13,7 @@ The goal is an Emacs setup that is **portable, testable, and free of personal da
 | `.dagger/config.ts` | Container recipe used by CI & local `npm run pipeline` |
 | `.github/workflows/ci.yml` | GitHub Actions runner that executes the Dagger pipeline |
 | `.gitignore` | Explicitly ignores `config.local.el`, cache folders, etc. |
+| `TESTING.md` | Detailed documentation of the lint + test + integration pipeline |
 
 ---
 
@@ -34,6 +35,7 @@ The goal is an Emacs setup that is **portable, testable, and free of personal da
 
 ---
 
+- **`TESTING.md`**: Step-by-step guide to the **lint / test / integration** pipeline that now runs on every push (see section below).
 -   **`.dagger/config.ts`**: Contains the main Dagger pipeline logic written in TypeScript. This script defines the steps to build Emacs, set up Doom Emacs, and test the configuration.
 -   **`.github/workflows/ci.yml`**: Defines the GitHub Actions workflow that triggers the CI pipeline on relevant file changes.
 -   **`package.json`**:
@@ -43,6 +45,7 @@ The goal is an Emacs setup that is **portable, testable, and free of personal da
 -   **`tsconfig.json`**: Configures the TypeScript compiler options. It's set up for an ES Module project (`"module": "NodeNext"`).
 -   **`dagger.json`**: Dagger project file specifying the project name, SDK (typescript), and the main source file (`.dagger/config.ts`).
 -   **`config.org`**: Literate configuration tangled to `config.el` for Doom.
+    -   Now reorganised and annotated for easier navigation (see the *Secure Configuration* and *Setup* sections at the top).
 ## Setting Up Environment Variables
 
 You may export variables in your shell profile (`.zshrc`, `.bashrc`) **or** use [direnv](https://direnv.net/) for per-project scopes.
@@ -64,14 +67,49 @@ Examples:
         SKIP_DEPS=true npm run pipeline
         ```
 
+## Quick-testing the Pipeline
+
+Sometimes you just want a **fast confidence check** instead of running the
+full container build (which compiles Emacs from source and can take several
+minutes). Two environment variables make this possible:
+
+| Variable     | Effect | Typical use-case |
+|--------------|--------|------------------|
+| `LINT_ONLY`  | Runs only the **Lint** stage (static `checkdoc` over every `*.el`) and exits. | Instant feedback while iterating on small Lisp edits |
+| `SKIP_DEPS`  | Skips the lengthy **apt + Emacs build** step. Assumes you already have a suitable Emacs binary in the base image. | CI warm-cache or local machines with Emacs pre-installed |
+
+Examples:
+
+```bash
+# 1. Fastest: just lint the code ( < 30 s on cached Docker image )
+LINT_ONLY=true npm run pipeline
+
+# 2. Lint + full test stages, but reuse host Emacs instead of rebuilding
+SKIP_DEPS=true npm run pipeline
+
+# 3. Full pipeline (lint → test → integration) – can take several minutes
+npm run pipeline
+```
+
+What each stage does:
+
+* **Lint**   – `checkdoc` ensures docstrings & style guidelines are met.  
+* **Test**   – `doom sync -e` byte-compiles the config & resolves packages.  
+* **Integration** – Boots Emacs in batch mode to prove the whole config loads.  
+
+> ℹ️ Expect the **full** run to pull an Ubuntu image, install build
+> dependencies and compile Emacs 30.  Subsequent runs are faster thanks to
+> Docker layer caching.
+
 
 ## User Identity
 
-Set `USER_FULL_NAME` and `USER_MAIL_ADDRESS` environment variables to populate your personal information when Emacs starts. The configuration defaults to empty strings if these variables are unset.
+Set **`USER_FULL_NAME`** and **`USER_MAIL_ADDRESS`** environment variables to populate your personal information when Emacs starts (aliases `EMACS_USER_NAME` / `EMACS_USER_EMAIL` are still accepted for backwards-compatibility).  
+The configuration defaults to empty strings if these variables are unset.
 ```bash
 # Generic identity
-export EMACS_USER_NAME="John Doe"
-export EMACS_USER_EMAIL="john@example.com"
+export USER_FULL_NAME="John Doe"
+export USER_MAIL_ADDRESS="john@example.com"
 
 # Mail / SMTP
 export EMACS_SMTP_USER="john@example.com"
