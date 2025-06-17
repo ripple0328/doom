@@ -172,8 +172,32 @@ echo '::endgroup::'`,
 
       // ──────────────────── 1. Lint Stage ────────────────────
       logStage("LINT", "Starting lint stage", startTime);
+      
+      // For lint-only mode, we need a minimal container with Emacs
+      const createLintContainer = () => {
+        if (lintOnly) {
+          // Lint-only mode: install minimal Emacs without full build dependencies
+          return client
+            .container()
+            .from("ubuntu:22.04")
+            .withWorkdir("/workspace")
+            .withMountedDirectory("/workspace", src)
+            .withEnvVariable("DOOMDIR", "/workspace")
+            .withEnvVariable("DEBIAN_FRONTEND", "noninteractive")
+            .withExec([
+              "bash", "-lc",
+              `echo '::group::🔧 Install minimal Emacs for linting' && \
+apt-get update && \
+apt-get install -y --no-install-recommends emacs-nox git && \
+echo '::endgroup::'`
+            ]);
+        } else {
+          return createBaseContainer();
+        }
+      };
+
       let ctLint = await withRetry(async () => 
-        createBaseContainer().withExec([
+        createLintContainer().withExec([
           "bash",
           "-lc",
           // Lint every .el file; checkdoc returns non-zero on issues (with -q)

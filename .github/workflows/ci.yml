@@ -6,11 +6,17 @@ on:
       - '**/*.el'
       - '**/*.org'
       - '.github/workflows/**'
+      - '.dagger/**'
+      - 'package*.json'
+      - 'tsconfig.json'
   pull_request:
     paths:
       - '**/*.el'
       - '**/*.org'
       - '.github/workflows/**'
+      - '.dagger/**'
+      - 'package*.json'
+      - 'tsconfig.json'
 
 #######################################################################
 #  Doom Emacs CI
@@ -29,6 +35,7 @@ jobs:
   doom-tests:
     name: "Doom Emacs • ${{ matrix.test_type }}"
     runs-on: ubuntu-latest
+    timeout-minutes: 45
 
     # Drive three variations via a build matrix
     strategy:
@@ -47,21 +54,28 @@ jobs:
       # Checkout repo
       #-------------------------------------------------------------
       - name: Checkout Doom config
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       #-------------------------------------------------------------
       # Node (for Dagger TypeScript SDK)
       #-------------------------------------------------------------
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
+          cache: 'npm'
 
       #-------------------------------------------------------------
-      # Install JS deps (dagger, ts-node, etc.)
+      # Install JS deps (dagger, tsx, etc.)
       #-------------------------------------------------------------
       - name: Install dependencies
         run: npm ci
+
+      #-------------------------------------------------------------
+      # Validate Dagger configuration
+      #-------------------------------------------------------------
+      - name: Validate Dagger config
+        run: npx tsc --noEmit .dagger/config.ts
 
       #-------------------------------------------------------------
       # Run the requested pipeline flavour

@@ -36,9 +36,15 @@ SKIP_DEPS=true npm run pipeline
 ```
 
 ### Testing Pipeline Stages
-1. **Lint** - `checkdoc` validation of all `.el` files (with retry logic)
+1. **Lint** - `checkdoc` validation of all `.el` files (with retry logic and minimal Emacs install)
 2. **Test** - `doom sync -e` byte-compilation and package resolution  
 3. **Integration** - Boot Emacs in batch mode with the configuration
+
+### GitHub Actions Matrix
+The CI runs three test variants:
+- **lint** - Fast linting with minimal Emacs installation (`LINT_ONLY=true`)
+- **skip-deps** - Full pipeline reusing host Emacs (`SKIP_DEPS=true`)
+- **full** - Complete pipeline building Emacs from source (main/PR only)
 
 ### Performance Optimizations
 The pipeline includes several caching optimizations:
