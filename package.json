@@ -4,17 +4,18 @@
   "description": "Dagger pipeline for testing Doom Emacs configuration",
   "type": "module",
   "scripts": {
-    "pipeline": "node --loader ts-node/esm .dagger/config.ts"
+    "pipeline": "tsx .dagger/config.ts"
   },
   "dependencies": {
-    "@dagger.io/dagger": "^0.18.0",
-    "morphcloud": "^0.0.9"
+    "@dagger.io/dagger": "^0.18.10",
+    "morphcloud": "^0.0.10"
   },
   "devDependencies": {
     "ts-node": "^10.9.2",
-    "typescript": "^5"
+    "typescript": "^5",
+    "tsx": "^4.7.0"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=18"
   }
 }
