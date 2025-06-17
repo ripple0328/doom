@@ -1,6 +1,6 @@
 #!/usr/bin/env ts-node
-import fs from "fs";
-import path from "path";
+import { readFileSync, existsSync, mkdirSync } from "fs";
+import { join } from "path";
 import { spawn } from "child_process";
 /**
  * Dagger pipeline for Doom Emacs configuration
@@ -53,7 +53,7 @@ async function main() {
 
   const dockerHostEnv = process.env.DOCKER_HOST;
   const defaultSock = "/var/run/docker.sock";
-  if (dockerHostEnv || fs.existsSync(defaultSock)) {
+  if (dockerHostEnv || existsSync(defaultSock)) {
     const hostSock = dockerHostEnv
       ? dockerHostEnv.replace(/^unix:\/\//, "")
       : defaultSock;
@@ -83,8 +83,8 @@ timeout 60 emacs --batch --eval "(progn (load-file (expand-file-name \\"early-in
     process.exit(code);
   }
 
-  const cacheDir = path.join(process.cwd(), ".dagger/cache");
-  fs.mkdirSync(cacheDir, { recursive: true });
+  const cacheDir = join(process.cwd(), ".dagger/cache");
+  mkdirSync(cacheDir, { recursive: true });
   process.env.XDG_CACHE_HOME = cacheDir;
 
   await connect(
@@ -260,9 +260,7 @@ echo '::endgroup::'`,
     },
     { 
       Workdir: process.cwd(), 
-      LogOutput: process.stderr,
-      // Add timeout for long-running operations
-      queryTimeout: 1800000 // 30 minutes
+      LogOutput: process.stderr
     }
   );
 
