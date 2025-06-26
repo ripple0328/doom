@@ -36,12 +36,14 @@ show_help() {
   echo
   echo -e "${BLUE}Options:${NC}"
   echo "  -h, --help      Show this help message"
-  echo "  -l, --lint      Run only the lint stage (fastest)"
+  echo "  -V, --validate  Run only configuration validation (fastest)"
+  echo "  -l, --lint      Run only the lint stage (fast)"
   echo "  -s, --skip-deps Skip dependency installation (medium speed)"
   echo "  -f, --full      Run the full pipeline (default, slowest but most thorough)"
   echo "  -v, --verbose   Show verbose output"
   echo
   echo -e "${BLUE}Examples:${NC}"
+  echo "  $0 --validate   # Quick configuration validation"
   echo "  $0 --lint       # Quick syntax check"
   echo "  $0 --skip-deps  # Skip rebuilding Emacs"
   echo "  $0 --full       # Full test including Emacs build"
@@ -66,10 +68,20 @@ show_elapsed_time() {
   echo -e "${BLUE}────────────────────────────────────────────────────${NC}"
 }
 
+# Function to run validation-only mode
+run_validate_only() {
+  echo -e "${BLUE}Running ${BOLD}validation-only${NC} mode (fastest)${NC}"
+  echo -e "${YELLOW}This mode only validates configuration structure and syntax${NC}"
+  echo
+  
+  VALIDATE_ONLY=true npm run pipeline
+  return $?
+}
+
 # Function to run lint-only mode
 run_lint_only() {
-  echo -e "${BLUE}Running ${BOLD}lint-only${NC} mode (fastest)${NC}"
-  echo -e "${YELLOW}This mode only checks Emacs Lisp syntax with checkdoc${NC}"
+  echo -e "${BLUE}Running ${BOLD}lint-only${NC} mode (fast)${NC}"
+  echo -e "${YELLOW}This mode checks configuration and runs checkdoc on Emacs Lisp${NC}"
   echo
   
   LINT_ONLY=true npm run pipeline
@@ -102,6 +114,10 @@ while [[ $# -gt 0 ]]; do
     -h|--help)
       show_help
       exit 0
+      ;;
+    -V|--validate)
+      TEST_MODE="validate"
+      shift
       ;;
     -l|--lint)
       TEST_MODE="lint"
@@ -147,6 +163,10 @@ echo
 
 EXIT_CODE=0
 case $TEST_MODE in
+  "validate")
+    run_validate_only
+    EXIT_CODE=$?
+    ;;
   "lint")
     run_lint_only
     EXIT_CODE=$?

@@ -91,8 +91,9 @@ timeout 60 emacs --batch --eval "(progn (load-file (expand-file-name \\"early-in
     async (client) => {
       const skipDeps = process.env.SKIP_DEPS === "true";
       const lintOnly = process.env.LINT_ONLY === "true";
+      const validateOnly = process.env.VALIDATE_ONLY === "true";
 
-      logStage("INIT", `Starting pipeline - skipDeps: ${skipDeps}, lintOnly: ${lintOnly}`, startTime);
+      logStage("INIT", `Starting pipeline - skipDeps: ${skipDeps}, lintOnly: ${lintOnly}, validateOnly: ${validateOnly}`, startTime);
 
       const src = client.host().directory(".", { exclude: ["node_modules"] });
 
@@ -169,6 +170,107 @@ ccache -s && \
 echo '::endgroup::'`,
           ]);
       };
+
+      // ──────────────────── 0. Validation Stage ─────────────────
+      logStage("VALIDATION", "Starting configuration validation", startTime);
+      
+      // Use lightweight container for validation (no heavy dependencies)
+      const validationContainer = await withRetry(async () =>
+        client
+          .container()
+          .from("ubuntu:22.04")
+          .withWorkdir("/workspace")
+          .withMountedDirectory("/workspace", src)
+          .withEnvVariable("DOOMDIR", "/workspace")
+          .withEnvVariable("DEBIAN_FRONTEND", "noninteractive")
+          .withExec([
+            "bash", "-lc",
+            "apt-get update && apt-get install -y --no-install-recommends gawk grep"
+          ])
+          .withExec([
+            "bash",
+            "-lc", 
+            `echo '::group::🔍 Configuration Validation' && \
+echo "Validating Doom Emacs configuration..." && \
+\
+# 1. Environment variable validation
+echo "• Checking environment variables..." && \
+if [ -z "\${USER_FULL_NAME:-}" ] && [ -z "\${EMACS_USER_NAME:-}" ]; then \
+  echo "  ⚠️  Warning: USER_FULL_NAME or EMACS_USER_NAME not set"; \
+fi && \
+if [ -z "\${USER_MAIL_ADDRESS:-}" ] && [ -z "\${EMACS_USER_EMAIL:-}" ]; then \
+  echo "  ⚠️  Warning: USER_MAIL_ADDRESS or EMACS_USER_EMAIL not set"; \
+fi && \
+\
+# 2. File structure validation
+echo "• Validating file structure..." && \
+for file in config.org init.el packages.el; do \
+  if [ ! -f "$file" ]; then \
+    echo "  ❌ Missing required file: $file" && exit 1; \
+  else \
+    echo "  ✅ Found: $file"; \
+  fi; \
+done && \
+\
+# 3. Org-mode syntax validation  
+echo "• Validating org-mode syntax..." && \
+if ! grep -q ":tangle config.el" config.org; then \
+  echo "  ❌ config.org missing required tangle property" && exit 1; \
+fi && \
+if ! grep -q "#+title:\\|#+TITLE:" config.org; then \
+  echo "  ⚠️  Warning: config.org missing title header"; \
+fi && \
+\
+# 4. Emacs Lisp syntax validation (basic)
+echo "• Validating Emacs Lisp syntax..." && \
+awk '/#+begin_src emacs-lisp/,/#+end_src/ { \
+  if (!/#+begin_src|#+end_src/) { \
+    gsub(/"[^"]*"/, ""); \
+    paren_count += gsub(/\\(/, ""); \
+    paren_count -= gsub(/\\)/, ""); \
+  } \
+} END { \
+  if (paren_count != 0) { \
+    print "  ❌ Unbalanced parentheses in config.org"; \
+    exit 1; \
+  } else { \
+    print "  ✅ Parentheses balanced"; \
+  } \
+}' config.org && \
+\
+# 5. Package validation
+echo "• Validating package declarations..." && \
+if [ -f packages.el ]; then \
+  package_count=$(grep -c "^(package!" packages.el || echo "0"); \
+  echo "  ✅ Found $package_count package declarations"; \
+else \
+  echo "  ⚠️  Warning: packages.el not found"; \
+fi && \
+\
+# 6. Security validation
+echo "• Performing security checks..." && \
+for file in config.org init.el packages.el; do \
+  if [ -f "$file" ]; then \
+    if grep -qi "@gmail\\.com\\|@outlook\\.com\\|@yahoo\\.com\\|password.*[\"'].*[\"']\\|token.*[\"'].*[\"']" "$file"; then \
+      echo "  ❌ Potential hardcoded personal data in $file" && exit 1; \
+    fi; \
+  fi; \
+done && \
+\
+echo "✅ Configuration validation completed successfully" && \
+echo '::endgroup::'`
+          ])
+      );
+      
+      logStage("VALIDATION", "Configuration validation completed", startTime);
+
+      /* Fast-exit path for validation-only checks */
+      if (validateOnly) {
+        const validationExit = await validationContainer.exitCode();
+        const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+        logStage("COMPLETE", `Pipeline (VALIDATE_ONLY) finished with exit code ${validationExit}`, startTime);
+        process.exit(validationExit);
+      }
 
       // ──────────────────── 1. Lint Stage ────────────────────
       logStage("LINT", "Starting lint stage", startTime);
