@@ -7,3 +7,4 @@ config.el
 config.local.el
 .dagger/cache/
 node_modules/
+custom.el

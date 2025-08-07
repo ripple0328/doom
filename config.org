@@ -53,7 +53,7 @@ The Doom dashboard is customized with a splash image and no shortmenu.
 ** Visual
 Theme and font settings for a consistent look across systems.
 #+begin_src emacs-lisp :tangle config.el
-(setq doom-theme 'modus-vivendi
+(setq doom-theme 'doom-dracula
 doom-font (font-spec :family "Iosevka Term SS04" :size 32 :weight 'light)
 doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 32)
 )
@@ -84,14 +84,6 @@ General editor behaviour tweaks.
       browse-url-browser-function 'xwidget-webkit-browse-url)
 #+end_src
 
-** Web Development
-Minor helpers for JS and TS workflows.
-#+begin_src emacs-lisp :tangle config.el
-(use-package jest-test-mode
-  :ensure t
-  :commands jest-test-mode
-  :hook (typescript-tsx-mode js-mode typescript-mode))
-#+end_src
 ** Mu4e
 # Removed – email settings now live in =config.local.el= to keep
 # personal information out of version control.
