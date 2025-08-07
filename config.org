@@ -90,6 +90,10 @@ General editor behaviour tweaks.
 ** Org
 #+begin_src emacs-lisp :tangle config.el
  (after! org
+    ;; patch for emasc 31
+    (when (fboundp 'org-restart-font-lock)
+    (remove-hook 'org-mode-hook #'org-restart-font-lock))
+
    (map! :map org-mode-map
          :n "M-j" #'org-metadown
          :n "M-k" #'org-metaup)
@@ -112,6 +116,13 @@ General editor behaviour tweaks.
        ))
 
 #+end_src
+
+#+RESULTS:
+| TODO       | :foreground | #7c7c75 | :weight | normal | :underline | t |
+| WAITING    | :foreground | #9f7efe | :weight | normal | :underline | t |
+| INPROGRESS | :foreground | #0098dd | :weight | normal | :underline | t |
+| DONE       | :foreground | #50a14f | :weight | normal | :underline | t |
+| CANCELLED  | :foreground | #ff6480 | :weight | normal | :underline | t |
 
 * Navigation
 Tools to move around projects.
