@@ -82,6 +82,17 @@ General editor behaviour tweaks.
       gnutls-verify-error nil
       truncate-string-ellipsis "…"
       browse-url-browser-function 'xwidget-webkit-browse-url)
+
+;; Set default indentation to 4 spaces for all programming modes
+(setq-default tab-width 4
+              indent-tabs-mode nil)
+
+;; Hook to apply 4-space indentation to all programming modes
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (setq tab-width 4
+                  indent-tabs-mode nil
+                  standard-indent 4)))
 #+end_src
 
 ** Mu4e
