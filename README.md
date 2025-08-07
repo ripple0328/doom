@@ -13,7 +13,15 @@ git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
 # Clone this configuration
 git clone --depth 1 https://github.com/ripple0328/doom ~/.config/doom
 
-# (optional) Install system dependencies
+# Install system dependencies
+# required dependencies
+brew install git ripgrep
+# optional dependencies
+brew install coreutils fd
+# Installs clang
+xcode-select --install
+
+# (optional) install dictionary
 brew install hunspell
 brew install hunspell-en
 # Install and sync
