@@ -54,13 +54,13 @@ The Doom dashboard is customized with a splash image and no shortmenu.
 Theme and font settings for a consistent look across systems.
 #+begin_src emacs-lisp :tangle config.el
 (setq doom-theme 'doom-dracula
-doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 32 :weight 'light)
-doom-variable-pitch-font (font-spec :family "CaskaydiaMono Nerd Font" :size 32)
+doom-font (font-spec :family "Cascadia Mono NF" :size 32 :weight 'light)
+doom-variable-pitch-font (font-spec :family "Cascadia Mono NF" :size 32)
 )
 (if (eq system-type 'darwin)
  (setq
-   doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 18 :weight 'light)
-   doom-variable-pitch-font (font-spec :family "CaskaydiaMono Nerd Font" :size 18)))
+   doom-font (font-spec :family "Cascadia Mono NF" :size 16 :weight 'light)
+   doom-variable-pitch-font (font-spec :family "Cascadia Mono NF" :size 16)))
 (setq-default line-spacing 0.24)
 #+end_src
 ** Core Behaviors
@@ -90,9 +90,6 @@ General editor behaviour tweaks.
 ** Org
 #+begin_src emacs-lisp :tangle config.el
  (after! org
-    ;; patch for emasc 31
-    (when (fboundp 'org-restart-font-lock)
-    (remove-hook 'org-mode-hook #'org-restart-font-lock))
 
    (map! :map org-mode-map
          :n "M-j" #'org-metadown
