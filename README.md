@@ -13,6 +13,9 @@ git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
 # Clone this configuration
 git clone --depth 1 https://github.com/ripple0328/doom ~/.config/doom
 
+# (optional) Install system dependencies
+brew install hunspell
+brew install hunspell-en
 # Install and sync
 ~/.config/emacs/bin/doom install 
 doom sync            # tangle & install packages
