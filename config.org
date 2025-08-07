@@ -281,8 +281,13 @@ Custom leader mappings and code assistant shortcuts.
         :desc "Coding session"   "s" #'my/gptel-coding-session
         :desc "Add project ctx"  "p" #'my/gptel-add-project-context)))
 
-;; Quick access in programming modes
-(map! :map prog-mode-map
+;; Set up local leader for all programming modes
+(setq doom-localleader-key ",")
+(setq doom-localleader-alt-key "M-,")
+
+;; Quick access in programming modes - applies to ALL programming languages
+(map! :after prog-mode
+      :map prog-mode-map
       :localleader
       :desc "Code review"       "r" #'my/gptel-code-review
       :desc "Explain"           "e" #'my/gptel-explain-code
@@ -290,5 +295,17 @@ Custom leader mappings and code assistant shortcuts.
       :desc "Debug"             "d" #'my/gptel-debug-help
       :desc "Optimize"          "o" #'my/gptel-optimize-code
       :desc "Tests"             "t" #'my/gptel-write-tests)
+
+;; Hook to ensure local leader is available in all programming modes
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (map! :map (current-local-map)
+                  :localleader
+                  :desc "Code review"       "r" #'my/gptel-code-review
+                  :desc "Explain"           "e" #'my/gptel-explain-code
+                  :desc "Refactor"          "f" #'my/gptel-refactor-code
+                  :desc "Debug"             "d" #'my/gptel-debug-help
+                  :desc "Optimize"          "o" #'my/gptel-optimize-code
+                  :desc "Tests"             "t" #'my/gptel-write-tests)))
 
 #+end_src
