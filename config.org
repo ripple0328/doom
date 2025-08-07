@@ -54,13 +54,13 @@ The Doom dashboard is customized with a splash image and no shortmenu.
 Theme and font settings for a consistent look across systems.
 #+begin_src emacs-lisp :tangle config.el
 (setq doom-theme 'doom-dracula
-doom-font (font-spec :family "Iosevka Term SS04" :size 32 :weight 'light)
-doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 32)
+doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 32 :weight 'light)
+doom-variable-pitch-font (font-spec :family "CaskaydiaMono Nerd Font" :size 32)
 )
 (if (eq system-type 'darwin)
  (setq
-   doom-font (font-spec :family "Iosevka Term SS04" :size 16 :weight 'light)
-   doom-variable-pitch-font (font-spec :family "Iosevka Term SS04" :size 16)))
+   doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 18 :weight 'light)
+   doom-variable-pitch-font (font-spec :family "CaskaydiaMono Nerd Font" :size 18)))
 (setq-default line-spacing 0.24)
 #+end_src
 ** Core Behaviors
