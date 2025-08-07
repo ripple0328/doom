@@ -15,6 +15,25 @@ This is a **Doom Emacs configuration** repository with automated CI/CD testing u
 - **`packages.el`** - Package declarations and configurations
 - **`.dagger/config.ts`** - Dagger pipeline for CI/CD testing
 
+## Key Bindings
+
+- **`SPC l`** - LLM Assistant menu (gptel integration with AI/ChatGPT)
+  - `SPC l c` - Chat with LLM
+  - `SPC l s` - Send to LLM
+  - `SPC l m` - LLM menu
+  - `SPC l r` - Rewrite with LLM
+  - `SPC l a` - Add context
+  - `SPC l f` - Add file to context
+  - **`SPC l o`** - Code Assistant submenu
+    - `SPC l o r` - Code review
+    - `SPC l o e` - Explain code
+    - `SPC l o f` - Refactor code
+    - `SPC l o d` - Debug help
+    - `SPC l o o` - Optimize code
+    - `SPC l o t` - Write tests
+    - `SPC l o s` - Start coding session
+    - `SPC l o p` - Add project context
+
 ## Common Commands
 
 ### Development Workflow

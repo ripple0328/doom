@@ -31,3 +31,9 @@
   )
 (package! sxhkdrc-mode        ; Syntax highlighting for sxhkd hotkey config
   )
+
+;;; ---------------------------------------------------------------------------
+;;;  AI/LLM Integration
+;;; ---------------------------------------------------------------------------
+(package! gptel               ; ChatGPT/LLM client for Emacs
+  )

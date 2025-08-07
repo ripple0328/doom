@@ -134,11 +134,161 @@ Modern dired replacement.
 (use-package! dirvish)
 #+end_src
 
+* AI/LLM Integration
+** gptel
+ChatGPT/LLM client for Emacs configured to use local OpenAI-compatible API.
+#+begin_src emacs-lisp :tangle config.el
+(after! gptel
+  (setq gptel-model 'openai/gpt-oss-20b
+        gptel-backend (gptel-make-openai "local-api"
+                        :host "localhost:1234"
+                        :protocol "http"
+                        :stream t
+                        :key "dummy-key"
+                        :models '(openai/gpt-oss-20b)))
+
+  ;; Code assistant system prompts/directives
+  (setq gptel-directives
+        '((default . "You are a helpful AI assistant.")
+          (code-review . "You are a senior software engineer conducting code reviews. Focus on:
+- Code quality, readability, and maintainability
+- Potential bugs and edge cases
+- Performance considerations
+- Best practices and design patterns
+- Security vulnerabilities
+Provide specific, actionable feedback with examples.")
+          (explain-code . "You are a code explanation expert. Break down complex code into understandable parts:
+- Explain what the code does step by step
+- Identify key algorithms and data structures
+- Point out important design decisions
+- Mention any potential gotchas or edge cases
+Use clear, simple language suitable for learning.")
+          (refactor . "You are a code refactoring specialist. Improve code while maintaining functionality:
+- Improve readability and structure
+- Eliminate code smells
+- Apply appropriate design patterns
+- Optimize performance where beneficial
+- Maintain backward compatibility
+Always explain your refactoring decisions.")
+          (debug . "You are a debugging expert. Help identify and fix bugs:
+- Analyze error messages and stack traces
+- Identify potential root causes
+- Suggest debugging strategies
+- Provide working fixes with explanations
+- Recommend preventive measures")
+          (optimize . "You are a performance optimization expert:
+- Identify performance bottlenecks
+- Suggest algorithmic improvements
+- Recommend efficient data structures
+- Consider memory usage and time complexity
+- Provide benchmarking strategies")
+          (test . "You are a testing expert. Help with test creation and strategy:
+- Write comprehensive unit tests
+- Suggest integration test scenarios
+- Identify edge cases to test
+- Recommend testing frameworks and tools
+- Explain test-driven development practices")))
+
+  ;; Set default to code review for programming modes
+  (add-hook 'prog-mode-hook
+            (lambda ()
+              (setq-local gptel-directives gptel-directives)
+              (setq-local gptel-default-mode 'text-mode))))
+#+end_src
+
+** Code Assistant Functions
+Helper functions for code assistant workflows.
+#+begin_src emacs-lisp :tangle config.el
+(defun my/gptel-code-review ()
+  "Review selected code with gptel using code-review directive."
+  (interactive)
+  (let ((gptel-directives (alist-get 'code-review gptel-directives)))
+    (call-interactively #'gptel-send)))
+
+(defun my/gptel-explain-code ()
+  "Explain selected code with gptel."
+  (interactive)
+  (let ((gptel-directives (alist-get 'explain-code gptel-directives)))
+    (call-interactively #'gptel-send)))
+
+(defun my/gptel-refactor-code ()
+  "Refactor selected code with gptel."
+  (interactive)
+  (let ((gptel-directives (alist-get 'refactor gptel-directives)))
+    (call-interactively #'gptel-rewrite)))
+
+(defun my/gptel-debug-help ()
+  "Get debugging help for selected code/error."
+  (interactive)
+  (let ((gptel-directives (alist-get 'debug gptel-directives)))
+    (call-interactively #'gptel-send)))
+
+(defun my/gptel-optimize-code ()
+  "Get optimization suggestions for selected code."
+  (interactive)
+  (let ((gptel-directives (alist-get 'optimize gptel-directives)))
+    (call-interactively #'gptel-send)))
+
+(defun my/gptel-write-tests ()
+  "Generate tests for selected code."
+  (interactive)
+  (let ((gptel-directives (alist-get 'test gptel-directives)))
+    (call-interactively #'gptel-send)))
+
+(defun my/gptel-add-project-context ()
+  "Add key project files to gptel context."
+  (interactive)
+  (let* ((project-root (projectile-project-root))
+         (key-files '("README.md" "package.json" "Cargo.toml" "pyproject.toml" 
+                     "requirements.txt" "go.mod" "pom.xml" "build.gradle")))
+    (when project-root
+      (dolist (file key-files)
+        (let ((full-path (expand-file-name file project-root)))
+          (when (file-exists-p full-path)
+            (gptel-add-file full-path)
+            (message "Added %s to context" file)))))))
+
+(defun my/gptel-coding-session ()
+  "Start a dedicated coding session with project context."
+  (interactive)
+  (my/gptel-add-project-context)
+  (let ((gptel-directives (alist-get 'code-review gptel-directives)))
+    (gptel "Code Assistant")))
+#+end_src
+
 ** Keybindings
-Custom leader mappings.
+Custom leader mappings and code assistant shortcuts.
 #+begin_src emacs-lisp :tangle config.el
 (map! :leader
       :desc "other window"
-      "w o" #'other-window)
+      "w o" #'other-window
+
+      (:prefix ("l" . "LLM Assistant")
+       :desc "Chat"              "c" #'gptel
+       :desc "Send"              "s" #'gptel-send
+       :desc "Menu"              "m" #'gptel-menu
+       :desc "Rewrite"           "r" #'gptel-rewrite
+       :desc "Add context"       "a" #'gptel-add
+       :desc "Add file"          "f" #'gptel-add-file
+       
+       (:prefix ("o" . "Code Assistant")
+        :desc "Code review"      "r" #'my/gptel-code-review
+        :desc "Explain code"     "e" #'my/gptel-explain-code
+        :desc "Refactor"         "f" #'my/gptel-refactor-code
+        :desc "Debug help"       "d" #'my/gptel-debug-help
+        :desc "Optimize"         "o" #'my/gptel-optimize-code
+        :desc "Write tests"      "t" #'my/gptel-write-tests
+        :desc "Coding session"   "s" #'my/gptel-coding-session
+        :desc "Add project ctx"  "p" #'my/gptel-add-project-context)))
+
+;; Quick access in programming modes
+(map! :map prog-mode-map
+      :localleader
+      :desc "Code review"       "r" #'my/gptel-code-review
+      :desc "Explain"           "e" #'my/gptel-explain-code
+      :desc "Refactor"          "f" #'my/gptel-refactor-code
+      :desc "Debug"             "d" #'my/gptel-debug-help
+      :desc "Optimize"          "o" #'my/gptel-optimize-code
+      :desc "Tests"             "t" #'my/gptel-write-tests)
 
 #+end_src
