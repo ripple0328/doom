@@ -54,8 +54,8 @@ The Doom dashboard is customized with a splash image and no shortmenu.
 Theme and font settings for a consistent look across systems.
 #+begin_src emacs-lisp :tangle config.el
 (setq doom-theme 'doom-dracula
-doom-font (font-spec :family "Cascadia Mono NF" :size 32 :weight 'light)
-doom-variable-pitch-font (font-spec :family "Cascadia Mono NF" :size 32)
+doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 32 :weight 'light)
+doom-variable-pitch-font (font-spec :family "CaskaydiaMono Nerd Font" :size 32)
 )
 (if (eq system-type 'darwin)
  (setq
@@ -239,7 +239,7 @@ Helper functions for code assistant workflows.
   "Add key project files to gptel context."
   (interactive)
   (let* ((project-root (projectile-project-root))
-         (key-files '("README.md" "package.json" "Cargo.toml" "pyproject.toml" 
+         (key-files '("README.md" "package.json" "Cargo.toml" "pyproject.toml"
                      "requirements.txt" "go.mod" "pom.xml" "build.gradle")))
     (when project-root
       (dolist (file key-files)
@@ -270,7 +270,7 @@ Custom leader mappings and code assistant shortcuts.
        :desc "Rewrite"           "r" #'gptel-rewrite
        :desc "Add context"       "a" #'gptel-add
        :desc "Add file"          "f" #'gptel-add-file
-       
+
        (:prefix ("o" . "Code Assistant")
         :desc "Code review"      "r" #'my/gptel-code-review
         :desc "Explain code"     "e" #'my/gptel-explain-code
